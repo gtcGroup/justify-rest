@@ -45,7 +45,7 @@ import com.gtcgroup.justify.rest.helper.JstResponseUtilHelper;
  * </p>
  *
  * @author
- * @since v.3.0
+* @since v8.3
  */
 @Provider
 public class LogResponseFilter implements ContainerResponseFilter {

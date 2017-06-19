@@ -38,6 +38,9 @@ repositories {
 }
 
 dependencies {
+	
+    //compile project(':justify-core')
+    compile 'com.gtcgroup:justify-core:8.3.0'  
 
 	compile 'junit:junit:latest.release'
     compile 'org.assertj:assertj-core:latest.release'	

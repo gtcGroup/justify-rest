@@ -41,7 +41,7 @@ import com.gtcgroup.justify.rest.helper.internal.RestCacheHelper;
  * </p>
  *
  * @author Marvin Toll
- * @since v3.0
+ * @since v8.3
  */
 public class JstConfigureRestRule extends JstBaseRule {
 

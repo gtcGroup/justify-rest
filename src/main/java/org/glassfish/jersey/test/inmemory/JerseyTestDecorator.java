@@ -38,7 +38,7 @@ import org.glassfish.jersey.test.JerseyTest;
  * </p>
  *
  * @author
- * @since v.6.0
+ * @since v.8.3
  */
 public class JerseyTestDecorator extends JerseyTest {
 

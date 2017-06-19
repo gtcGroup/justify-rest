@@ -43,7 +43,7 @@ import com.gtcgroup.justify.core.exception.internal.JustifyRuntimeException;
  * </p>
  *
  * @author Marvin Toll
- * @since v3.0
+ * @since v8.3
  */
 public enum JstResponseUtilHelper {
 

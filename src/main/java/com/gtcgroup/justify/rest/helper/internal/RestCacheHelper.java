@@ -43,7 +43,7 @@ import com.gtcgroup.justify.rest.rule.JstRuleRestPO;
  * </p>
  *
  * @author Marvin Toll
- * @since v3.0
+ * @since v8.3
  */
 
 public enum RestCacheHelper {

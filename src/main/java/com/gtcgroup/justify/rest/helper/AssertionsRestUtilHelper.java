@@ -48,7 +48,7 @@ import com.gtcgroup.justify.rest.helper.internal.RestCacheHelper;
  * </p>
  *
  * @author Marvin Toll
- * @since v3.0
+ * @since v8.3
  */
 
 public class AssertionsRestUtilHelper {
@@ -75,7 +75,7 @@ public class AssertionsRestUtilHelper {
         Response response;
         try {
             response = webTarget.request().delete(Response.class);
-        } catch (@SuppressWarnings("unused") final Exception e) {
+        } catch (final Exception e) {
             throw new JustifyRuntimeException(AssertionsRestUtilHelper.CDI_RULE_SEQUENCE);
         }
 
@@ -95,7 +95,7 @@ public class AssertionsRestUtilHelper {
         Response response;
         try {
             response = webTarget.request().get(Response.class);
-        } catch (@SuppressWarnings("unused") final Exception e) {
+        } catch (final Exception e) {
             throw new JustifyRuntimeException(AssertionsRestUtilHelper.CDI_RULE_SEQUENCE);
         }
 
@@ -115,7 +115,7 @@ public class AssertionsRestUtilHelper {
         Response response;
         try {
             response = webTarget.request().post(jstAssertRestPO.getRequestEntity(), Response.class);
-        } catch (@SuppressWarnings("unused") final Exception e) {
+        } catch (final Exception e) {
             throw new JustifyRuntimeException(AssertionsRestUtilHelper.CDI_RULE_SEQUENCE);
         }
 
@@ -135,7 +135,7 @@ public class AssertionsRestUtilHelper {
         Response response;
         try {
             response = webTarget.request().put(jstAssertRestPO.getRequestEntity(), Response.class);
-        } catch (@SuppressWarnings("unused") final Exception e) {
+        } catch (final Exception e) {
             throw new JustifyRuntimeException(AssertionsRestUtilHelper.CDI_RULE_SEQUENCE);
         }
 
@@ -155,7 +155,7 @@ public class AssertionsRestUtilHelper {
         String response;
         try {
             response = webTarget.request().get(String.class);
-        } catch (@SuppressWarnings("unused") final Exception e) {
+        } catch (final Exception e) {
             throw new JustifyRuntimeException(AssertionsRestUtilHelper.CDI_RULE_SEQUENCE);
         }
 

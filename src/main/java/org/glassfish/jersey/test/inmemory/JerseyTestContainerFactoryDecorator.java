@@ -45,7 +45,7 @@ import org.glassfish.jersey.test.spi.TestContainerFactory;
  * </p>
  *
  * @author
- * @since v.6.0
+ * @since v.8.3
  */
 public class JerseyTestContainerFactoryDecorator implements TestContainerFactory {
 
