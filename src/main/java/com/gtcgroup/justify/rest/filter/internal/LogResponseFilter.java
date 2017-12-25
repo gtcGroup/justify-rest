@@ -32,7 +32,7 @@ import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.ext.Provider;
 
-import com.gtcgroup.justify.core.rule.JstConfigureUserIdRule;
+import com.gtcgroup.justify.core.extension.JstConfigureUserIdExtension;
 import com.gtcgroup.justify.rest.helper.JstResponseUtilHelper;
 
 /**
@@ -78,7 +78,7 @@ public class LogResponseFilter implements ContainerResponseFilter {
 		message.append("HTTP RESPONSE");
 		message.append("\n\tHeader: ").append(responseContext.getHeaders());
 		message.append("\n\tMedia:  ").append(responseContext.getMediaType());
-		message.append("\n\tUser:   ").append(JstConfigureUserIdRule.userID);
+		message.append("\n\tUser:   ").append(JstConfigureUserIdExtension.userId);
 		message.append("\n\tStatus: ").append(responseContext.getStatus());
 
 		final String temp = JstResponseUtilHelper.formatResponseEntity(responseContext);

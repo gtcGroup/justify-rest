@@ -32,7 +32,7 @@ import java.util.Map;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
-import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Assertions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
