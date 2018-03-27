@@ -21,4 +21,4 @@ include 'api'
 include 'services:webservice'
 */
 
-rootProject.name = 'justify-jpa'
+rootProject.name = 'justify-rest'
