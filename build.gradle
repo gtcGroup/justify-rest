@@ -109,7 +109,7 @@ signing {
 }
 
 group = "com.gtcgroup"
-archivesBaseName = "justify-just"
+archivesBaseName = "justify-rest"
 version = "8.5.0-alpha"
 
 task writeTestPOM << {
