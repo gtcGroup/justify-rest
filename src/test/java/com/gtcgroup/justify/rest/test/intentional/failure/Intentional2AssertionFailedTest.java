@@ -23,32 +23,33 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.gtcgroup.justify.rest.po;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+package com.gtcgroup.justify.rest.test.intentional.failure;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import com.gtcgroup.justify.core.JstConstant;
-import com.gtcgroup.justify.core.po.JstExceptionPO;
 import com.gtcgroup.justify.core.test.extension.JstConfigureTestLogToConsole;
+import com.gtcgroup.justify.rest.test.assertion.AssertionsREST;
+import com.gtcgroup.justify.rest.test.assertion.JstAssertRestPO;
+import com.gtcgroup.justify.rest.test.extension.JstConfigureTestREST;
+import com.gtcgroup.justify.rest.test.extension.dependency.ConcreteConfigureTestRestPO;
 
 @SuppressWarnings("static-method")
+@Tag(value = "intentional")
 @JstConfigureTestLogToConsole()
-public class JstExceptionPoTest {
+@JstConfigureTestREST(configureTestRestPO = ConcreteConfigureTestRestPO.class)
+public class Intentional2AssertionFailedTest {
 
 	@Test
-	public void testJstExceptionPO_null() {
+	public void testGET_requestPathException() {
 
-		final JstExceptionPO exceptionPO = JstExceptionPO.withMessage(null);
+		AssertionsREST.assertGET(String.class, JstAssertRestPO.withRequestPath("fake"));
+	}
 
-		assertAll(() -> {
-			assertEquals(JstExceptionPO.THE_MESSAGE_IS_NULL, exceptionPO.getMessage());
-			assertNotNull(exceptionPO.getLogReferenceCode());
-			assertNotNull(exceptionPO.getLogTimeStamp());
-			assertEquals(JstConstant.DEFAULT_USER_ID, exceptionPO.getUserId());
-		});
+	@Test
+	public void testGET_returnTypeException() {
+
+		AssertionsREST.assertGET(Long.class, JstAssertRestPO.withRequestPath("values"));
 	}
 }

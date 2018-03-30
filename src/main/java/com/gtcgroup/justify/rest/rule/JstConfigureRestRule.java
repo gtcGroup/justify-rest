@@ -25,7 +25,7 @@
  */
 package com.gtcgroup.justify.rest.rule;
 
-import org.junit.Rule;
+import org.h2.bnf.Rule;
 import org.junit.rules.TestRule;
 
 import com.gtcgroup.justify.core.base.JstBaseRule;

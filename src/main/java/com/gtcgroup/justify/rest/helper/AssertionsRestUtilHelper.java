@@ -38,6 +38,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.gtcgroup.justify.core.exception.internal.JustifyRuntimeException;
 import com.gtcgroup.justify.rest.helper.internal.RestCacheHelper;
+import com.gtcgroup.justify.rest.test.assertion.JstAssertRestPO;
 
 /**
  * This Util Helper class provides support for REST assertion processing.

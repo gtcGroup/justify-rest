@@ -7,7 +7,7 @@ import javax.ws.rs.container.ContainerResponseFilter;
 
 import org.glassfish.jersey.server.ResourceConfig;
 
-import com.gtcgroup.justify.rest.helper.JstAssertRestPO;
+import com.gtcgroup.justify.rest.test.assertion.JstAssertRestPO;
 
 /**
  * This Decorator class extends the {@link ResourceConfig} class.

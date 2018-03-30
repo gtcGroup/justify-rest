@@ -1,7 +1,7 @@
 /*
  * [Licensed per the Open Source "MIT License".]
  *
- * Copyright (c) 2006 - 2016 by
+ * Copyright (c) 2006 - 2018 by
  * Global Technology Consulting Group, Inc. at
  * http://gtcGroup.com
  *
@@ -23,38 +23,61 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.glassfish.jersey.test.inmemory;
+package com.gtcgroup.justify.rest.test;
+
+import java.lang.reflect.Field;
+import java.util.Map;
 
 import javax.ws.rs.core.Application;
 
 import org.glassfish.jersey.test.JerseyTest;
 
 /**
- * This class decorates {@link JerseyTest}.
+ * This concrete {@link JerseyTest} class supports JUnit 5.
  *
  * <p style="font-family:Verdana; font-size:10px; font-style:italic">
- * Copyright (c) 2006 - 2016 by Global Technology Consulting Group, Inc. at
+ * Copyright (c) 2006 - 2018 by Global Technology Consulting Group, Inc. at
  * <a href="http://gtcGroup.com">gtcGroup.com </a>.
  * </p>
  *
- * @author
- * @since v.8.3
+ * @author Marvin Toll
+ * @since v.8.5
  */
-public class JerseyTestDecorator extends JerseyTest {
+public class JstJerseyTest extends JerseyTest {
 
-	static {
-		System.setProperty("jersey.config.test.container.factory", JerseyTestContainerFactoryDecorator.class.getName());
+	public JstJerseyTest(final Application jaxrsApplication) {
+		super(jaxrsApplication);
 	}
 
-	/**
-	 * Constructor
-	 *
-	 * @param application
-	 */
-	public JerseyTestDecorator(final Application application) {
+	// protected JstJerseyTest() {
+	// super();
+	// // TODO Auto-generated constructor stub
+	// }
+	//
+	// protected JstJerseyTest(final TestContainerFactory testContainerFactory) {
+	// super(testContainerFactory);
+	// // TODO Auto-generated constructor stub
+	// }
 
-		super(application);
+	public void enable(final String... featureNames) {
 
-		return;
+		try {
+			final Field field = JerseyTest.class.getDeclaredField("propertyMap");
+			field.setAccessible(true);
+
+			@SuppressWarnings("unchecked")
+			final Map<String, String> propertyMap = (Map<String, String>) field.get(this);
+			field.setAccessible(true);
+
+			for (final String featureName : featureNames) {
+
+				propertyMap.put(featureName, Boolean.TRUE.toString());
+			}
+
+		} catch (final Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 }
