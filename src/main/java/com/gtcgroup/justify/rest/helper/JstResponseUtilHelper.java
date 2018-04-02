@@ -1,7 +1,7 @@
 /*
  * [Licensed per the Open Source "MIT License".]
  *
- * Copyright (c) 2006 - 2016 by
+ * Copyright (c) 2006 - 2018 by
  * Global Technology Consulting Group, Inc. at
  * http://gtcGroup.com
  *
@@ -26,19 +26,24 @@
 
 package com.gtcgroup.justify.rest.helper;
 
-import javax.ws.rs.container.ContainerResponseContext;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.ws.rs.client.ClientResponseContext;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
+import org.glassfish.jersey.message.internal.ReaderWriter;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gtcgroup.justify.core.exception.internal.JustifyRuntimeException;
 
 /**
  * This Util Helper class provides convenience methods for building response
  * instances.
  *
  * <p style="font-family:Verdana; font-size:10px; font-style:italic">
- * Copyright (c) 2006 - 2016 by Global Technology Consulting Group, Inc. at
+ * Copyright (c) 2006 - 2018 by Global Technology Consulting Group, Inc. at
  * <a href="http://gtcGroup.com">gtcGroup.com </a>.
  * </p>
  *
@@ -72,22 +77,23 @@ public enum JstResponseUtilHelper {
 	}
 
 	/**
-	 * @param responseContext
 	 * @return {@link String}
 	 */
-	public static String formatResponseEntity(final ContainerResponseContext responseContext) {
+	public static String formatResponseEntity(final ClientResponseContext responseContext) throws IOException {
 
-		String message = null;
+		String message = "Not Available";
 
-		final ObjectMapper mapper = new ObjectMapper();
+		final ByteArrayOutputStream out = new ByteArrayOutputStream();
+		final InputStream in = responseContext.getEntityStream();
 
-		try {
-			message = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(responseContext.getEntity());
+		if (in.available() > 0) {
+			ReaderWriter.writeTo(in, out);
 
-		} catch (final Exception e) {
+			final ObjectMapper mapper = new ObjectMapper();
 
-            throw new JustifyRuntimeException(e);
+			message = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(new String(out.toByteArray()));
 		}
+
 		return message;
 	}
 }

@@ -24,34 +24,26 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.gtcgroup.justify.rest.test.intentional.failure;
+package com.gtcgroup.justify.rest.test;
 
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import com.gtcgroup.justify.core.base.JstBaseSuffix;
 
-import com.gtcgroup.justify.core.test.extension.JstConfigureTestLogToConsole;
-import com.gtcgroup.justify.rest.test.assertion.AssertionsREST;
-import com.gtcgroup.justify.rest.test.assertion.JstAssertRestPO;
-import com.gtcgroup.justify.rest.test.extension.JstConfigureTestREST;
-import com.gtcgroup.justify.rest.test.extension.dependency.ConcreteConfigureTestRestPO;
+/**
+ * This Transfer Object base class supports readability.
+ *
+ * <p style="font-family:Verdana; font-size:10px; font-style:italic">
+ * Copyright (c) 2006 - 2018 by Global Technology Consulting Group, Inc. at
+ * <a href="http://gtcGroup.com">gtcGroup.com </a>.
+ * </p>
+ *
+ * @author Marvin Toll
+ * @since v3.0
+ */
+public abstract class JstBaseTO extends JstBaseSuffix {
 
-@SuppressWarnings("static-method")
-@Tag(value = "intentional")
-@JstConfigureTestLogToConsole()
-@JstConfigureTestREST(configureTestRestPO = ConcreteConfigureTestRestPO.class)
-public class Intentional2AssertionFailedTest {
+	@Override
+	protected String assignPatternSuffixTM() {
 
-	@Test
-	public void testGET_requestPathException() {
-
-		AssertionsREST.assertGET(String.class,
-				JstAssertRestPO.withAcceptedResponseMediaTypes().withRequestPath("fake"));
-	}
-
-	@Test
-	public void testGET_returnTypeException() {
-
-		AssertionsREST.assertGET(Long.class,
-				JstAssertRestPO.withAcceptedResponseMediaTypes().withRequestPath("values"));
+		return "TO";
 	}
 }

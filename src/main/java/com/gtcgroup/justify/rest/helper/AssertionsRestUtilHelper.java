@@ -1,7 +1,7 @@
 /*
  * [Licensed per the Open Source "MIT License".]
  *
- * Copyright (c) 2006 - 2016 by
+ * Copyright (c) 2006 - 2018 by
  * Global Technology Consulting Group, Inc. at
  * http://gtcGroup.com
  *
@@ -44,7 +44,7 @@ import com.gtcgroup.justify.rest.test.assertion.JstAssertRestPO;
  * This Util Helper class provides support for REST assertion processing.
  *
  * <p style="font-family:Verdana; font-size:10px; font-style:italic">
- * Copyright (c) 2006 - 2016 by Global Technology Consulting Group, Inc. at
+ * Copyright (c) 2006 - 2018 by Global Technology Consulting Group, Inc. at
  * <a href="http://gtcGroup.com">gtcGroup.com </a>.
  * </p>
  *
@@ -219,7 +219,7 @@ public class AssertionsRestUtilHelper {
 
     private static WebTarget initializeWebTarget(final JstAssertRestPO jstAssertRestPO) {
 
-        final WebTarget webTarget = RestCacheHelper.target(jstAssertRestPO.getRequestPath());
+        final WebTarget webTarget = RestCacheHelper.target(jstAssertRestPO.getWebTargetPath());
 
         for (final Map.Entry<String, Object[]> entry : jstAssertRestPO.getQueryParamMap().entrySet()) {
 

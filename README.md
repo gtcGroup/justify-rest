@@ -8,6 +8,6 @@ Justify seeks API alignment between Java 1.8+ application code and JUnit 5 test 
 
 ### <a name="changes"></a>Release Notes
 
-#### Version 8.5.0-? <span class="date">2018-mm-dd</span>
+#### Version 8.5.0-alpha <span class="date">2018-mm-dd</span>
 
-*   2 [License and Javadoc Cleanup](https://github.com/gtcGroup/justify-rest/issues/2)
+*   2 [Convert to JUnit5 from JUnit4](https://github.com/gtcGroup/justify-rest/issues/2)

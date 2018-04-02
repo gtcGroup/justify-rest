@@ -26,16 +26,20 @@
 
 package com.gtcgroup.justify.rest.test.assertion;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.List;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
-import org.glassfish.jersey.test.JerseyTest;
+import org.glassfish.jersey.client.ClientConfig;
 import org.opentest4j.AssertionFailedError;
 
-import com.gtcgroup.justify.rest.test.helper.JstRestCacheHelper;
 import com.sun.research.ws.wadl.HTTPMethods;
 
 /**
@@ -53,48 +57,115 @@ public enum AssertionsREST {
 
 	INSTANCE;
 
-	public static <OBJECT> OBJECT assertGET(final Class<OBJECT> returnType, final JstAssertRestPO assertRestPO) {
+	private static final String HTTP_LOCALHOST_9998 = "http://localhost:9998/";
 
-		OBJECT response = null;
+	@SuppressWarnings({ "unchecked" })
+	public static <TO> TO assertListGET(final JstAssertRestPO assertRestPO) {
+
 		try {
-			if (true) {
+			final List<?> actualResponseList = buildListResponse(assertRestPO);
 
-				response = buildSingleResponse(returnType, assertRestPO);
-
-			} else {
-
-				final JerseyTest jerseyTest = JstRestCacheHelper.retrieveJerseyTest();
-
-				final List<OBJECT> items = jerseyTest.target().request(MediaType.APPLICATION_JSON)
-						.get(new GenericType<List<OBJECT>>() {
-						});
-
-				response = (OBJECT) items;
+			if (assertRestPO.containsExpectedResponseList()) {
+				assertEquals(assertRestPO.getExpectedResponseList().toArray(), actualResponseList.toArray());
 			}
+
+			return (TO) actualResponseList;
 
 		} catch (final Exception e) {
 			throwAssertFailedWithMessage(HTTPMethods.GET.toString(), assertRestPO, e.getMessage());
 		}
-		return response;
+		return null;
+
 	}
 
-	private static <OBJECT> OBJECT buildSingleResponse(final Class<OBJECT> returnType,
+	@SuppressWarnings("unchecked")
+	public static <TO> TO assertSingleGET(final Class<TO> transferObjectClass, final JstAssertRestPO assertRestPO) {
+
+		TO transferObject = null;
+		try {
+
+			transferObject = buildSingleResponse(transferObjectClass, assertRestPO);
+
+		} catch (final Exception e) {
+			throwAssertFailedWithMessage(HTTPMethods.GET.toString(), assertRestPO, e.getMessage());
+		}
+
+		if (null == transferObject) {
+			throwAssertFailedWithMessage(HTTPMethods.GET.toString(), assertRestPO, "The response is null.");
+		}
+		return transferObject;
+	}
+
+	@SuppressWarnings("resource")
+	private static List<?> buildListResponse(final JstAssertRestPO assertRestPO) {
+
+		final ClientConfig clientConfig = assertRestPO.getClientConfig();
+
+		for (final Class<Object> filter : assertRestPO.getClientFilterList()) {
+
+			clientConfig.register(filter);
+		}
+
+		final Client client = ClientBuilder.newClient(clientConfig);
+
+		// TODO: Consider for future implementation.
+		// client.register(componentClass);
+
+		WebTarget webTarget = client.target(HTTP_LOCALHOST_9998);
+
+		if (assertRestPO.containsWebTargetPath()) {
+			webTarget = webTarget.path(assertRestPO.getWebTargetPath());
+		}
+
+		if (assertRestPO.containsQueryParam()) {
+			webTarget = webTarget.queryParam(assertRestPO.getQueryParamName(), assertRestPO.getQueryParamValues());
+		}
+
+		final Invocation.Builder invocationBuilder = webTarget.request(assertRestPO.getAcceptedResponseMediaTypes());
+
+		// TODO: Consider for future implementation.
+		// invocationBuilder.header(name, value);
+
+		final Response response = invocationBuilder.get();
+		List<?> responseList = null;
+
+		if (null == response) {
+			throwAssertFailedWithMessage(HTTPMethods.GET.toString(), assertRestPO, "The response is null.");
+		} else {
+
+			responseList = response.readEntity(new GenericType<List<?>>() {
+				// Empty Block
+			});
+		}
+
+		return responseList;
+	}
+
+	private static <TO> TO buildSingleResponse(final Class<TO> transferObjectClass,
 			final JstAssertRestPO assertRestPO) {
 
-		final JerseyTest jerseyTest = JstRestCacheHelper.retrieveJerseyTest();
+		final ClientConfig clientConfig = assertRestPO.getClientConfig();
 
-		WebTarget webTarget;
+		for (final Class<Object> filter : assertRestPO.getClientFilterList()) {
 
-		if (assertRestPO.containsBaseURI()) {
-			webTarget = jerseyTest.target(assertRestPO.getBaseURI());
-		} else {
-			webTarget = jerseyTest.target();
+			clientConfig.register(filter);
 		}
 
-		if (assertRestPO.containsRequestPath()) {
-			webTarget = webTarget.path(assertRestPO.getRequestPath());
+		final Client client = ClientBuilder.newClient(clientConfig);
+
+		WebTarget webTarget = client.target(HTTP_LOCALHOST_9998);
+
+		if (assertRestPO.containsWebTargetPath()) {
+			webTarget = webTarget.path(assertRestPO.getWebTargetPath());
 		}
-		return webTarget.request(assertRestPO.getAcceptedResponseMediaTypes()).get(returnType);
+
+		if (assertRestPO.containsQueryParam()) {
+			webTarget = webTarget.queryParam(assertRestPO.getQueryParamName(), assertRestPO.getQueryParamValues());
+		}
+
+		final Invocation.Builder invocationBuilder = webTarget.request(assertRestPO.getAcceptedResponseMediaTypes());
+
+		return invocationBuilder.get(transferObjectClass);
 	}
 
 	// public static <OBJECT> OBJECT assertPOST(final Class<OBJECT> returnType,
@@ -123,17 +194,11 @@ public enum AssertionsREST {
 
 		assertionFailedMessage.append("The [");
 		assertionFailedMessage.append(methodType);
-		assertionFailedMessage.append("] method response with ");
+		assertionFailedMessage.append("] method with ");
 
-		if (assertRestPO.containsBaseURI()) {
-			assertionFailedMessage.append("base uri [");
-			assertionFailedMessage.append(assertRestPO.getBaseURI());
-			assertionFailedMessage.append("] and ");
-		}
-
-		if (assertRestPO.containsRequestPath()) {
-			assertionFailedMessage.append("request path [");
-			assertionFailedMessage.append(assertRestPO.getRequestPath());
+		if (assertRestPO.containsWebTargetPath()) {
+			assertionFailedMessage.append("target path [");
+			assertionFailedMessage.append(HTTP_LOCALHOST_9998 + assertRestPO.getWebTargetPath());
 			assertionFailedMessage.append("] and ");
 		}
 

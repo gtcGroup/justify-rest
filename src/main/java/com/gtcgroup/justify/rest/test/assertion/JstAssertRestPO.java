@@ -1,7 +1,7 @@
 /*
  * [Licensed per the Open Source "MIT License".]
  *
- * Copyright (c) 2006 - 2016 by
+ * Copyright (c) 2006 - 2018 by
  * Global Technology Consulting Group, Inc. at
  * http://gtcGroup.com
  *
@@ -25,19 +25,25 @@
  */
 package com.gtcgroup.justify.rest.test.assertion;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.ws.rs.client.ClientRequestFilter;
+import javax.ws.rs.client.ClientResponseFilter;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
+import org.glassfish.jersey.client.ClientConfig;
+
 import com.gtcgroup.justify.core.base.JstBasePO;
-import com.gtcgroup.justify.rest.rule.JstRuleRestPO;
+import com.gtcgroup.justify.rest.filter.internal.LogRequestDefaultFilter;
+import com.gtcgroup.justify.rest.filter.internal.LogResponseDefaultFilter;
 
 /**
  * This Parameter Object class supports JAX-RS testing assertions.
  *
  * <p style="font-family:Verdana; font-size:10px; font-style:italic">
- * Copyright (c) 2006 - 2016 by Global Technology Consulting Group, Inc. at
+ * Copyright (c) 2006 - 2018 by Global Technology Consulting Group, Inc. at
  * <a href="http://gtcGroup.com">gtcGroup.com </a>.
  * </p>
  *
@@ -62,13 +68,21 @@ public class JstAssertRestPO extends JstBasePO {
 		return new JstAssertRestPO(acceptedResponseMediaTypes);
 	}
 
-	private String requestPath;
+	private ClientConfig clientConfig = new ClientConfig();
 
-	private String baseURI = null;
+	private final List<Class<Object>> clientFilterList = new ArrayList<>();
+
+	private WebTarget webTarget;
+
+	private String webTargetPath;
+
+	private String queryParamName;
+
+	private Object[] queryParamValues;
 
 	private String[] acceptedResponseMediaTypes;
 
-	private final Map<String, Object[]> queryParamMap = new HashMap<>();
+	List<?> expectedResponseList;
 
 	/**
 	 * Constructor
@@ -81,30 +95,93 @@ public class JstAssertRestPO extends JstBasePO {
 	}
 
 	/**
-	 * @param queryName
-	 * @param queryParams
 	 * @return {@link JstAssertRestPO}
 	 */
-	public JstAssertRestPO addQueryParam(final String queryName, final String[] queryParams) {
-		this.queryParamMap.put(queryName, queryParams);
+	public JstAssertRestPO withClientConfig(final ClientConfig clientConfig) {
+		this.clientConfig = clientConfig;
 		return this;
 	}
 
 	/**
-	 * @return {@link Map}
+	 * @return {@link JstAssertRestPO}
 	 */
-	public Map<String, Object[]> getQueryParamMap() {
+	@SuppressWarnings("unchecked")
+	public <FILTER extends ClientRequestFilter> JstAssertRestPO withClientRequestFilters(
+			final Class<FILTER>... clientRequestFilters) {
 
-		return this.queryParamMap;
+		for (final Class<FILTER> clientFilter : clientRequestFilters) {
+			this.clientFilterList.add((Class<Object>) clientFilter);
+		}
+		return this;
 	}
 
 	/**
-	 * @return {@link JstRuleRestPO}
+	 * @return {@link JstAssertRestPO}
 	 */
-	public JstAssertRestPO withBaseURI(final String baseURI) {
+	@SuppressWarnings("unchecked")
+	public <FILTER extends ClientResponseFilter> JstAssertRestPO withClientResponseFilters(
+			final Class<FILTER>... clientResponseFilters) {
 
-		this.baseURI = baseURI;
+		for (final Class<FILTER> clientFilter : clientResponseFilters) {
+			this.clientFilterList.add((Class<Object>) clientFilter);
+		}
 		return this;
+	}
+
+	/**
+	 * @return {@link JstAssertRestPO}
+	 */
+	public JstAssertRestPO withExpectedResponseList(final List<?> expectedResponseList) {
+		this.expectedResponseList = expectedResponseList;
+		return this;
+	}
+
+	/**
+	 * @return {@link JstAssertRestPO}
+	 */
+	@SuppressWarnings("unchecked")
+	public JstAssertRestPO withLogRequestDefaultFilter() {
+		withClientRequestFilters(LogRequestDefaultFilter.class);
+		return this;
+	}
+
+	/**
+	 * @return {@link JstAssertRestPO}
+	 */
+	@SuppressWarnings("unchecked")
+	public <FILTER extends ClientRequestFilter> JstAssertRestPO withLogRequestFilter(
+			final Class<FILTER> requestFilter) {
+		withClientRequestFilters(requestFilter);
+		return this;
+	}
+
+	/**
+	 * @return {@link JstAssertRestPO}
+	 */
+	@SuppressWarnings("unchecked")
+	public JstAssertRestPO withLogResponseDefaultFilter() {
+		withClientResponseFilters(LogResponseDefaultFilter.class);
+		return this;
+	}
+
+	/**
+	 * @return {@link JstAssertRestPO}
+	 */
+	@SuppressWarnings("unchecked")
+	public <FILTER extends ClientResponseFilter> JstAssertRestPO withLogResponseFilter(
+			final Class<FILTER> responseFilter) {
+		withClientResponseFilters(responseFilter);
+		return this;
+	}
+
+	/**
+	 * @return {@link JstAssertRestPO}
+	 */
+	public JstAssertRestPO withQueryParam(final String name, final String... values) {
+		this.queryParamName = name;
+		this.queryParamValues = values;
+		return this;
+
 	}
 
 	/**
@@ -112,35 +189,71 @@ public class JstAssertRestPO extends JstBasePO {
 	 */
 	public JstAssertRestPO withRequestPath(final String requestPath) {
 
-		this.requestPath = requestPath;
+		this.webTargetPath = requestPath;
 		return this;
 	}
 
-	protected boolean containsBaseURI() {
-		return null != this.baseURI;
+	/**
+	 * @return {@link JstAssertRestPO}
+	 */
+	public JstAssertRestPO withWebTarget(final WebTarget webTarget) {
+		this.webTarget = webTarget;
+		return this;
 	}
 
-	protected boolean containsRequestPath() {
-		return null != this.requestPath;
+	protected boolean containsExpectedResponseList() {
+		return null != this.expectedResponseList;
+	}
+
+	protected boolean containsQueryParam() {
+
+		if (null == this.queryParamName || null == this.queryParamValues) {
+			return false;
+		}
+		return true;
+	}
+
+	protected boolean containsWebTargetPath() {
+		return null != this.webTargetPath;
 	}
 
 	protected String[] getAcceptedResponseMediaTypes() {
 		return this.acceptedResponseMediaTypes;
 	}
 
-	/**
-	 * @return {@link String}
-	 */
-	protected String getBaseURI() {
+	protected ClientConfig getClientConfig() {
+		return this.clientConfig;
+	}
 
-		return this.baseURI;
+	protected List<Class<Object>> getClientFilterList() {
+		return this.clientFilterList;
+	}
+
+	protected List<?> getExpectedResponseList() {
+		return this.expectedResponseList;
+	}
+
+	protected String getQueryParamName() {
+		return this.queryParamName;
+	}
+
+	protected Object[] getQueryParamValues() {
+		return this.queryParamValues;
+	}
+
+	protected WebTarget getWebTarget() {
+		return this.webTarget;
 	}
 
 	/**
 	 * @return {@link String}
 	 */
-	protected String getRequestPath() {
+	protected String getWebTargetPath() {
 
-		return this.requestPath;
+		return this.webTargetPath;
+	}
+
+	protected boolean isWebTarget() {
+		return null == this.webTarget;
 	}
 }

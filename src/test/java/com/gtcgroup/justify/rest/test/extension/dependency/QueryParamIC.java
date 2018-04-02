@@ -26,8 +26,15 @@
 
 package com.gtcgroup.justify.rest.test.extension.dependency;
 
+import java.util.List;
+
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import com.gtcgroup.justify.rest.test.JstBaseIC;
 
@@ -42,20 +49,45 @@ import com.gtcgroup.justify.rest.test.JstBaseIC;
  * @author Marvin Toll
  * @since v.8.5
  */
-@Path("")
-public class ValuesIC extends JstBaseIC {
+@Path("/query")
+@SuppressWarnings("static-method")
+public class QueryParamIC extends JstBaseIC {
 
-	public static final String DEFAULT_VALUES = "value1, value2";
-	private final String values;
+	@GET
+	@Path("/param1")
+	public Response getData(@QueryParam("from") final int from, @QueryParam("to") final int to,
+			@QueryParam("detailList") final List<String> detailList) {
 
-	public ValuesIC() {
-		this.values = DEFAULT_VALUES;
+		return Response.status(200)
+				.entity("getUsers is called, from : " + from + ", to : " + to + ", detailList" + detailList.toString())
+				.build();
+
 	}
 
 	@GET
-	@Path("/values")
-	// @Produces(MediaType.APPLICATION_JSON)
-	public String get() {
-		return this.values;
+	@Path("/param2")
+	public Response getData(@Context final UriInfo info) {
+
+		final String from = info.getQueryParameters().getFirst("from");
+		final String to = info.getQueryParameters().getFirst("to");
+		final List<String> detailList = info.getQueryParameters().get("detailList");
+
+		return Response.status(200)
+				.entity("getUsers is called, from : " + from + ", to : " + to + ", detailList" + detailList.toString())
+				.build();
+
 	}
+
+	@GET
+	@Path("/param3")
+	public Response getDefaults(@DefaultValue("1000") @QueryParam("from") final int from,
+			@DefaultValue("999") @QueryParam("to") final int to,
+			@DefaultValue("name") @QueryParam("detailList") final List<String> detailList) {
+
+		return Response.status(200)
+				.entity("getUsers is called, from : " + from + ", to : " + to + ", detailList" + detailList.toString())
+				.build();
+
+	}
+
 }

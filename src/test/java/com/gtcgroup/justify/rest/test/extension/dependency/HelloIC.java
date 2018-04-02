@@ -32,7 +32,9 @@ import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import com.gtcgroup.justify.rest.test.JstBaseIC;
 
@@ -51,16 +53,26 @@ import com.gtcgroup.justify.rest.test.JstBaseIC;
 @Path("/hello")
 public class HelloIC extends JstBaseIC {
 
+	public static List<HelloTO> helloList = new ArrayList<>();
+
+	static {
+		final HelloTO helloTO = new HelloTO();
+		helloTO.setText("The Same");
+
+		helloList.add(helloTO);
+		helloList.add(helloTO);
+	}
+
+	// This method is called if APPLICATION_JSON is request
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<String> getItems() {
+	public Response getItems() {
 
-		final List<String> stringList = new ArrayList<>();
-		stringList.add("First");
-		stringList.add("Second");
-		stringList.add("Third");
+		final GenericEntity<List<HelloTO>> genericEntity = new GenericEntity<List<HelloTO>>(helloList) {
+			// Empty Block
+		};
 
-		return stringList;
+		return Response.ok(genericEntity).type(MediaType.APPLICATION_JSON).build();
 	}
 
 	// This method is called if HTML is request

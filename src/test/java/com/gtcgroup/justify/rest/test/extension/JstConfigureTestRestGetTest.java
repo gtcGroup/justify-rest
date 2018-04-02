@@ -42,13 +42,13 @@ import com.gtcgroup.justify.rest.test.extension.dependency.ConcreteConfigureTest
 @SuppressWarnings("static-method")
 @JstConfigureTestLogToConsole()
 @JstConfigureTestREST(configureTestRestPO = ConcreteConfigureTestRestPO.class)
-public class JstConfigureTestRestTest {
+public class JstConfigureTestRestGetTest {
 
 	@Test
 	public void testGET_requestBaseUriException() {
 
 		Assertions.assertThrows(AssertionFailedError.class, () -> {
-			AssertionsREST.assertGET(String.class,
+			AssertionsREST.assertSingleGET(String.class,
 					JstAssertRestPO.withAcceptedResponseMediaTypes().withRequestPath("fake"));
 		});
 	}
@@ -57,7 +57,7 @@ public class JstConfigureTestRestTest {
 	public void testGET_returnTypeException() {
 
 		Assertions.assertThrows(AssertionFailedError.class, () -> {
-			AssertionsREST.assertGET(Long.class,
+			AssertionsREST.assertSingleGET(Long.class,
 					JstAssertRestPO.withAcceptedResponseMediaTypes().withRequestPath("values"));
 		});
 	}
@@ -67,14 +67,35 @@ public class JstConfigureTestRestTest {
 
 		assertAll(() -> {
 
-			AssertionsREST.assertGET(String.class,
-					JstAssertRestPO.withAcceptedResponseMediaTypes(MediaType.TEXT_HTML).withBaseURI("hello"));
+			AssertionsREST.assertSingleGET(String.class,
+					JstAssertRestPO.withAcceptedResponseMediaTypes(MediaType.TEXT_HTML).withRequestPath("hello")
+							.withLogRequestDefaultFilter());
 
-			AssertionsREST.assertGET(String.class,
-					JstAssertRestPO.withAcceptedResponseMediaTypes(MediaType.TEXT_PLAIN).withRequestPath("hello"));
+			AssertionsREST.assertSingleGET(String.class,
+					JstAssertRestPO.withAcceptedResponseMediaTypes(MediaType.TEXT_PLAIN).withRequestPath("hello")
+							.withLogResponseDefaultFilter());
 
-			AssertionsREST.assertGET(String.class,
-					JstAssertRestPO.withAcceptedResponseMediaTypes(MediaType.TEXT_XML).withRequestPath("hello"));
+			AssertionsREST.assertSingleGET(String.class,
+					JstAssertRestPO.withAcceptedResponseMediaTypes(MediaType.TEXT_XML).withRequestPath("hello")
+							.withLogRequestDefaultFilter().withLogResponseDefaultFilter());
+
+			// AssertionsREST.assertListGET(JstAssertRestPO.withAcceptedResponseMediaTypes().withRequestPath("hello")
+			// .withLogResponseDefaultFilter().withExpectedResponseList(HelloIC.helloList));
+		});
+	}
+
+	@Test
+	public void testQueryParamsIC() {
+
+		assertAll(() -> {
+			AssertionsREST.assertSingleGET(String.class,
+					JstAssertRestPO.withAcceptedResponseMediaTypes().withRequestPath("values"));
+
+			AssertionsREST.assertSingleGET(String.class,
+					JstAssertRestPO.withAcceptedResponseMediaTypes().withRequestPath("values"));
+
+			AssertionsREST.assertSingleGET(String.class,
+					JstAssertRestPO.withAcceptedResponseMediaTypes().withRequestPath("values"));
 		});
 	}
 
@@ -82,14 +103,14 @@ public class JstConfigureTestRestTest {
 	public void testValuesIC() {
 
 		assertAll(() -> {
-			AssertionsREST.assertGET(String.class,
-					JstAssertRestPO.withAcceptedResponseMediaTypes().withBaseURI("values"));
-
-			AssertionsREST.assertGET(String.class,
+			AssertionsREST.assertSingleGET(String.class,
 					JstAssertRestPO.withAcceptedResponseMediaTypes().withRequestPath("values"));
 
-			AssertionsREST.assertGET(String.class,
-					JstAssertRestPO.withAcceptedResponseMediaTypes().withBaseURI("").withRequestPath("values"));
+			AssertionsREST.assertSingleGET(String.class,
+					JstAssertRestPO.withAcceptedResponseMediaTypes().withRequestPath("values"));
+
+			AssertionsREST.assertSingleGET(String.class,
+					JstAssertRestPO.withAcceptedResponseMediaTypes().withRequestPath("values"));
 		});
 	}
 }
