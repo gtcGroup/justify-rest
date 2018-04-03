@@ -23,13 +23,19 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.gtcgroup.justify.rest.filter.internal;
+package com.gtcgroup.justify.rest.filter;
 
 import java.io.IOException;
 
 import javax.ws.rs.client.ClientRequestContext;
-import javax.ws.rs.client.ClientRequestFilter;
+import javax.ws.rs.client.ClientResponseContext;
 import javax.ws.rs.client.ClientResponseFilter;
+import javax.ws.rs.ext.Provider;
+
+import com.gtcgroup.justify.core.test.extension.JstBaseExtension;
+import com.gtcgroup.justify.core.test.helper.internal.LogTestConsoleUtilHelper;
+import com.gtcgroup.justify.rest.filter.internal.LogEntityUtilHelper;
+import com.gtcgroup.justify.rest.test.assertion.JstAssertRestPO;
 
 /**
  * This {@link ClientResponseFilter} filter provides logging.
@@ -42,28 +48,36 @@ import javax.ws.rs.client.ClientResponseFilter;
  * @author
  * @since v8.5.0
  */
-public class LogRequestDefaultFilter implements ClientRequestFilter {
+@Provider
+public class JstLogResponseDefaultFilter implements ClientResponseFilter {
 
 	/**
-	 * @param containerRequestContext
 	 * @return {@link String}
 	 */
-	private static String formatRequestEntityMessage(final ClientRequestContext requestContext) {
+	private static String formatResponseEntityMessage(final ClientResponseContext responseContext) throws IOException {
 
 		final StringBuilder message = new StringBuilder();
 
-		message.append("\nHTTP REQUEST");
-		message.append("\n\tMethod: ").append(requestContext.getMethod());
-		message.append("\n\tHeader: ").append(requestContext.getHeaders());
-		message.append("\n\tURI:    ").append(requestContext.getUri());
+		message.append("HTTP RESPONSE");
+		message.append("\n\tHeader: ").append(responseContext.getHeaders());
+		message.append("\n\tUser:   ").append(JstBaseExtension.getUserId());
+		message.append("\n\tStatus: ").append(responseContext.getStatus());
+
+		if (responseContext.hasEntity()) {
+			message.append("\n\tEntity:\n");
+			LogEntityUtilHelper.retrieveEntity(message, JstAssertRestPO.getMaxEntityLoggingSize(), responseContext);
+		}
+
 		message.append("\n");
 
 		return message.toString();
 	}
 
 	@Override
-	public void filter(final ClientRequestContext requestContext) throws IOException {
-		System.out.println(formatRequestEntityMessage(requestContext));
+	public void filter(final ClientRequestContext requestContext, final ClientResponseContext responseContext)
+			throws IOException {
+
+		LogTestConsoleUtilHelper.logToConsole(formatResponseEntityMessage(responseContext));
 
 	}
 }

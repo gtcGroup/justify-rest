@@ -24,14 +24,19 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.gtcgroup.justify.rest.helper;
+package com.gtcgroup.justify.rest.filter.internal;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.FilterOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
- * This Util Helper class provides convenience methods for building response
- * instances.
+ * This {@link FileOutputStream} class provides convenience methods for building
+ * response instances.
  *
  * <p style="font-family:Verdana; font-size:10px; font-style:italic">
  * Copyright (c) 2006 - 2018 by Global Technology Consulting Group, Inc. at
@@ -41,28 +46,31 @@ import javax.ws.rs.core.Response.ResponseBuilder;
  * @author Marvin Toll
  * @since v8.3
  */
-public enum JstResponseUtilHelper {
+public class ResponseFilterOutputStream extends FilterOutputStream {
 
-	INSTANCE;
+	private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
 
-	/**
-	 * @param statusAsInt
-	 * @return {@link Response}
-	 */
-	public static Response buildResponseInstance(final int statusAsInt) {
+	private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-		final ResponseBuilder responseBuilder = Response.status(statusAsInt);
-		return responseBuilder.build();
+	public ResponseFilterOutputStream(final OutputStream outputStream) {
+		super(outputStream);
 	}
 
-	/**
-	 * @param entity
-	 * @param statusAsInt
-	 * @return {@link Response}
-	 */
-	public static Response buildResponseInstance(final Object entity, final int statusAsInt) {
+	public void retrieveEntityMessage(final StringBuilder message, final int maxEntitySize) {
 
-		final ResponseBuilder responseBuilder = Response.status(statusAsInt);
-		return responseBuilder.entity(entity).build();
+		final byte[] entity = this.baos.toByteArray();
+
+		message.append(new String(entity, 0, entity.length, DEFAULT_CHARSET));
+		if (entity.length > maxEntitySize) {
+			message.append("...more...");
+		}
+	}
+
+	@Override
+	public void write(final int maxEntitySize) throws IOException {
+		if (this.baos.size() <= maxEntitySize) {
+			this.baos.write(maxEntitySize);
+		}
+		this.out.write(maxEntitySize);
 	}
 }

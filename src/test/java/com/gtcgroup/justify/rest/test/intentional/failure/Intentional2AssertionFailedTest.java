@@ -44,14 +44,14 @@ public class Intentional2AssertionFailedTest {
 	@Test
 	public void testGET_requestPathException() {
 
-		AssertionsREST.assertGET(String.class,
+		AssertionsREST.assertSingleGET(String.class,
 				JstAssertRestPO.withAcceptedResponseMediaTypes().withRequestPath("fake"));
 	}
 
 	@Test
 	public void testGET_returnTypeException() {
 
-		AssertionsREST.assertGET(Long.class,
+		AssertionsREST.assertSingleGET(Long.class,
 				JstAssertRestPO.withAcceptedResponseMediaTypes().withRequestPath("values"));
 	}
 }

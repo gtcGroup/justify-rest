@@ -36,8 +36,8 @@ import javax.ws.rs.core.MediaType;
 import org.glassfish.jersey.client.ClientConfig;
 
 import com.gtcgroup.justify.core.base.JstBasePO;
-import com.gtcgroup.justify.rest.filter.internal.LogRequestDefaultFilter;
-import com.gtcgroup.justify.rest.filter.internal.LogResponseDefaultFilter;
+import com.gtcgroup.justify.rest.filter.JstLogRequestDefaultFilter;
+import com.gtcgroup.justify.rest.filter.JstLogResponseDefaultFilter;
 
 /**
  * This Parameter Object class supports JAX-RS testing assertions.
@@ -51,6 +51,12 @@ import com.gtcgroup.justify.rest.filter.internal.LogResponseDefaultFilter;
  * @since v8.3
  */
 public class JstAssertRestPO extends JstBasePO {
+
+	private static int maxEntityLoggingSize = 8 * 1024;
+
+	public static int getMaxEntityLoggingSize() {
+		return maxEntityLoggingSize;
+	}
 
 	/**
 	 * @return {@link JstAssertRestPO}
@@ -70,7 +76,7 @@ public class JstAssertRestPO extends JstBasePO {
 
 	private ClientConfig clientConfig = new ClientConfig();
 
-	private final List<Class<Object>> clientFilterList = new ArrayList<>();
+	private final List<Class<?>> clientProviderList = new ArrayList<>();
 
 	private WebTarget webTarget;
 
@@ -81,8 +87,6 @@ public class JstAssertRestPO extends JstBasePO {
 	private Object[] queryParamValues;
 
 	private String[] acceptedResponseMediaTypes;
-
-	List<?> expectedResponseList;
 
 	/**
 	 * Constructor
@@ -110,7 +114,7 @@ public class JstAssertRestPO extends JstBasePO {
 			final Class<FILTER>... clientRequestFilters) {
 
 		for (final Class<FILTER> clientFilter : clientRequestFilters) {
-			this.clientFilterList.add((Class<Object>) clientFilter);
+			this.clientProviderList.add(clientFilter);
 		}
 		return this;
 	}
@@ -123,16 +127,8 @@ public class JstAssertRestPO extends JstBasePO {
 			final Class<FILTER>... clientResponseFilters) {
 
 		for (final Class<FILTER> clientFilter : clientResponseFilters) {
-			this.clientFilterList.add((Class<Object>) clientFilter);
+			this.clientProviderList.add(clientFilter);
 		}
-		return this;
-	}
-
-	/**
-	 * @return {@link JstAssertRestPO}
-	 */
-	public JstAssertRestPO withExpectedResponseList(final List<?> expectedResponseList) {
-		this.expectedResponseList = expectedResponseList;
 		return this;
 	}
 
@@ -141,7 +137,7 @@ public class JstAssertRestPO extends JstBasePO {
 	 */
 	@SuppressWarnings("unchecked")
 	public JstAssertRestPO withLogRequestDefaultFilter() {
-		withClientRequestFilters(LogRequestDefaultFilter.class);
+		withClientRequestFilters(JstLogRequestDefaultFilter.class);
 		return this;
 	}
 
@@ -160,7 +156,7 @@ public class JstAssertRestPO extends JstBasePO {
 	 */
 	@SuppressWarnings("unchecked")
 	public JstAssertRestPO withLogResponseDefaultFilter() {
-		withClientResponseFilters(LogResponseDefaultFilter.class);
+		withClientResponseFilters(JstLogResponseDefaultFilter.class);
 		return this;
 	}
 
@@ -171,6 +167,14 @@ public class JstAssertRestPO extends JstBasePO {
 	public <FILTER extends ClientResponseFilter> JstAssertRestPO withLogResponseFilter(
 			final Class<FILTER> responseFilter) {
 		withClientResponseFilters(responseFilter);
+		return this;
+	}
+
+	/**
+	 * @return {@link JstAssertRestPO}
+	 */
+	public JstAssertRestPO withMaxEntityLoggingSize(final int maxEntityLoggingSize) {
+		JstAssertRestPO.maxEntityLoggingSize = maxEntityLoggingSize;
 		return this;
 	}
 
@@ -201,10 +205,6 @@ public class JstAssertRestPO extends JstBasePO {
 		return this;
 	}
 
-	protected boolean containsExpectedResponseList() {
-		return null != this.expectedResponseList;
-	}
-
 	protected boolean containsQueryParam() {
 
 		if (null == this.queryParamName || null == this.queryParamValues) {
@@ -225,12 +225,8 @@ public class JstAssertRestPO extends JstBasePO {
 		return this.clientConfig;
 	}
 
-	protected List<Class<Object>> getClientFilterList() {
-		return this.clientFilterList;
-	}
-
-	protected List<?> getExpectedResponseList() {
-		return this.expectedResponseList;
+	protected List<Class<?>> getClientProviderList() {
+		return this.clientProviderList;
 	}
 
 	protected String getQueryParamName() {

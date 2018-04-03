@@ -27,6 +27,8 @@
 package com.gtcgroup.justify.rest.test.extension;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import javax.ws.rs.core.MediaType;
 
@@ -67,20 +69,28 @@ public class JstConfigureTestRestGetTest {
 
 		assertAll(() -> {
 
-			AssertionsREST.assertSingleGET(String.class,
-					JstAssertRestPO.withAcceptedResponseMediaTypes(MediaType.TEXT_HTML).withRequestPath("hello")
-							.withLogRequestDefaultFilter());
+			assertTrue(
+					AssertionsREST
+							.assertSingleGET(String.class,
+									JstAssertRestPO.withAcceptedResponseMediaTypes(MediaType.TEXT_HTML)
+											.withRequestPath("hello").withLogResponseDefaultFilter())
+							.contains("<h1>Hello Jersey</h1>"));
 
-			AssertionsREST.assertSingleGET(String.class,
-					JstAssertRestPO.withAcceptedResponseMediaTypes(MediaType.TEXT_PLAIN).withRequestPath("hello")
-							.withLogResponseDefaultFilter());
+			assertTrue(
+					AssertionsREST
+							.assertSingleGET(String.class,
+									JstAssertRestPO.withAcceptedResponseMediaTypes(MediaType.TEXT_PLAIN)
+											.withRequestPath("hello").withLogRequestDefaultFilter())
+							.contains("Hello Jersey"));
 
-			AssertionsREST.assertSingleGET(String.class,
-					JstAssertRestPO.withAcceptedResponseMediaTypes(MediaType.TEXT_XML).withRequestPath("hello")
-							.withLogRequestDefaultFilter().withLogResponseDefaultFilter());
+			assertTrue(AssertionsREST
+					.assertSingleGET(String.class,
+							JstAssertRestPO.withAcceptedResponseMediaTypes(MediaType.TEXT_XML).withRequestPath("hello")
+									.withLogRequestDefaultFilter().withLogResponseDefaultFilter())
+					.contains("<hello>Hello Jersey</hello>"));
 
-			// AssertionsREST.assertListGET(JstAssertRestPO.withAcceptedResponseMediaTypes().withRequestPath("hello")
-			// .withLogResponseDefaultFilter().withExpectedResponseList(HelloIC.helloList));
+			assertNotNull(AssertionsREST.assertListGET(JstAssertRestPO.withAcceptedResponseMediaTypes()
+					.withRequestPath("hello").withLogResponseDefaultFilter()));
 		});
 	}
 

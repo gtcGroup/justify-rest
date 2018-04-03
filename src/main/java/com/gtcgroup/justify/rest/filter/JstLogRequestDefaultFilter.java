@@ -23,17 +23,16 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.gtcgroup.justify.rest.filter.internal;
+package com.gtcgroup.justify.rest.filter;
 
 import java.io.IOException;
 
 import javax.ws.rs.client.ClientRequestContext;
-import javax.ws.rs.client.ClientResponseContext;
+import javax.ws.rs.client.ClientRequestFilter;
 import javax.ws.rs.client.ClientResponseFilter;
+import javax.ws.rs.ext.Provider;
 
-import com.gtcgroup.justify.core.test.extension.JstBaseExtension;
 import com.gtcgroup.justify.core.test.helper.internal.LogTestConsoleUtilHelper;
-import com.gtcgroup.justify.rest.helper.JstResponseUtilHelper;
 
 /**
  * This {@link ClientResponseFilter} filter provides logging.
@@ -46,36 +45,29 @@ import com.gtcgroup.justify.rest.helper.JstResponseUtilHelper;
  * @author
  * @since v8.5.0
  */
-public class LogResponseDefaultFilter implements ClientResponseFilter {
+@Provider
+public class JstLogRequestDefaultFilter implements ClientRequestFilter {
 
 	/**
+	 * @param containerRequestContext
 	 * @return {@link String}
 	 */
-	private static String formatResponseEntityMessage(final ClientResponseContext responseContext) throws IOException {
+	private static String formatRequestEntityMessage(final ClientRequestContext requestContext) {
 
 		final StringBuilder message = new StringBuilder();
 
-		message.append("HTTP RESPONSE");
-		message.append("\n\tHeader: ").append(responseContext.getHeaders());
-		message.append("\n\tUser:   ").append(JstBaseExtension.getUserId());
-		message.append("\n\tStatus: ").append(responseContext.getStatus());
-
-		if (responseContext.hasEntity()) {
-
-			message.append("\n\tEntity:\n");
-			message.append(JstResponseUtilHelper.formatResponseEntity(responseContext));
-		}
-
+		message.append("\nHTTP REQUEST");
+		message.append("\n\tMethod: ").append(requestContext.getMethod());
+		message.append("\n\tHeader: ").append(requestContext.getHeaders());
+		message.append("\n\tURI:    ").append(requestContext.getUri());
 		message.append("\n");
 
 		return message.toString();
 	}
 
 	@Override
-	public void filter(final ClientRequestContext requestContext, final ClientResponseContext responseContext)
-			throws IOException {
-
-		LogTestConsoleUtilHelper.logToConsole(formatResponseEntityMessage(responseContext));
+	public void filter(final ClientRequestContext requestContext) throws IOException {
+		LogTestConsoleUtilHelper.logToConsole(formatRequestEntityMessage(requestContext));
 
 	}
 }

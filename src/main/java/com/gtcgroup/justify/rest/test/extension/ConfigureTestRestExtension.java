@@ -1,7 +1,5 @@
 package com.gtcgroup.justify.rest.test.extension;
 
-import javax.ws.rs.core.Application;
-
 import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.TestProperties;
 import org.junit.jupiter.api.extension.AfterAllCallback;
@@ -13,28 +11,13 @@ import com.gtcgroup.justify.rest.test.helper.JstRestCacheHelper;
 
 public class ConfigureTestRestExtension extends JstBaseExtension implements BeforeAllCallback, AfterAllCallback {
 
+	// TODO: Consider eliminating JerseyTest?
 	private JerseyTest jerseyTest;
-
-	private Application applicationProvider;
-
-	public ConfigureTestRestExtension() {
-
-	}
-
-	// public ConfigureTestRestExtension(final Application applicationProvider) {
-	// this.applicationProvider = applicationProvider;
-	// }
-	//
-	// public ConfigureTestRestExtension(final Supplier<Application>
-	// applicationSupplier) {
-	// // this.applicationProvider = (unused) -> applicationSupplier.get();
-	// }
 
 	@Override
 	public void afterAll(final ExtensionContext context) throws Exception {
 
 		this.jerseyTest.tearDown();
-
 	}
 
 	@Override
@@ -61,7 +44,7 @@ public class ConfigureTestRestExtension extends JstBaseExtension implements Befo
 		final JstConfigureTestREST configureTestREST = (JstConfigureTestREST) retrieveAnnotation(
 				extensionContext.getRequiredTestClass(), JstConfigureTestREST.class);
 
-		// Values from Annotation.
+		// Retrieve values from annotation.
 		return configureTestREST.configureTestRestPO();
 	}
 

@@ -26,8 +26,6 @@
 
 package com.gtcgroup.justify.rest.test.assertion;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.util.List;
 
 import javax.ws.rs.client.Client;
@@ -60,16 +58,11 @@ public enum AssertionsREST {
 	private static final String HTTP_LOCALHOST_9998 = "http://localhost:9998/";
 
 	@SuppressWarnings({ "unchecked" })
-	public static <TO> TO assertListGET(final JstAssertRestPO assertRestPO) {
+	public static <LIST extends List<?>> LIST assertListGET(final JstAssertRestPO assertRestPO) {
 
 		try {
-			final List<?> actualResponseList = buildListResponse(assertRestPO);
 
-			if (assertRestPO.containsExpectedResponseList()) {
-				assertEquals(assertRestPO.getExpectedResponseList().toArray(), actualResponseList.toArray());
-			}
-
-			return (TO) actualResponseList;
+			return (LIST) buildListResponse(assertRestPO);
 
 		} catch (final Exception e) {
 			throwAssertFailedWithMessage(HTTPMethods.GET.toString(), assertRestPO, e.getMessage());
@@ -78,50 +71,28 @@ public enum AssertionsREST {
 
 	}
 
-	@SuppressWarnings("unchecked")
-	public static <TO> TO assertSingleGET(final Class<TO> transferObjectClass, final JstAssertRestPO assertRestPO) {
+	public static <OBJECT> OBJECT assertSingleGET(final Class<OBJECT> responseClass,
+			final JstAssertRestPO assertRestPO) {
 
-		TO transferObject = null;
+		OBJECT responseInstance = null;
 		try {
 
-			transferObject = buildSingleResponse(transferObjectClass, assertRestPO);
+			responseInstance = buildSingleResponse(responseClass, assertRestPO);
 
 		} catch (final Exception e) {
 			throwAssertFailedWithMessage(HTTPMethods.GET.toString(), assertRestPO, e.getMessage());
 		}
 
-		if (null == transferObject) {
+		if (null == responseInstance) {
 			throwAssertFailedWithMessage(HTTPMethods.GET.toString(), assertRestPO, "The response is null.");
 		}
-		return transferObject;
+		return responseInstance;
 	}
 
 	@SuppressWarnings("resource")
 	private static List<?> buildListResponse(final JstAssertRestPO assertRestPO) {
 
-		final ClientConfig clientConfig = assertRestPO.getClientConfig();
-
-		for (final Class<Object> filter : assertRestPO.getClientFilterList()) {
-
-			clientConfig.register(filter);
-		}
-
-		final Client client = ClientBuilder.newClient(clientConfig);
-
-		// TODO: Consider for future implementation.
-		// client.register(componentClass);
-
-		WebTarget webTarget = client.target(HTTP_LOCALHOST_9998);
-
-		if (assertRestPO.containsWebTargetPath()) {
-			webTarget = webTarget.path(assertRestPO.getWebTargetPath());
-		}
-
-		if (assertRestPO.containsQueryParam()) {
-			webTarget = webTarget.queryParam(assertRestPO.getQueryParamName(), assertRestPO.getQueryParamValues());
-		}
-
-		final Invocation.Builder invocationBuilder = webTarget.request(assertRestPO.getAcceptedResponseMediaTypes());
+		final Invocation.Builder invocationBuilder = instantiateInvocationBuilder(assertRestPO);
 
 		// TODO: Consider for future implementation.
 		// invocationBuilder.header(name, value);
@@ -141,17 +112,26 @@ public enum AssertionsREST {
 		return responseList;
 	}
 
-	private static <TO> TO buildSingleResponse(final Class<TO> transferObjectClass,
+	private static <OBJECT> OBJECT buildSingleResponse(final Class<OBJECT> responseClass,
 			final JstAssertRestPO assertRestPO) {
 
+		final Invocation.Builder invocationBuilder = instantiateInvocationBuilder(assertRestPO);
+
+		return invocationBuilder.get(responseClass);
+	}
+
+	private static Invocation.Builder instantiateInvocationBuilder(final JstAssertRestPO assertRestPO) {
 		final ClientConfig clientConfig = assertRestPO.getClientConfig();
 
-		for (final Class<Object> filter : assertRestPO.getClientFilterList()) {
+		for (final Class<?> filter : assertRestPO.getClientProviderList()) {
 
 			clientConfig.register(filter);
 		}
 
 		final Client client = ClientBuilder.newClient(clientConfig);
+
+		// TODO: Consider for future implementation.
+		// client.register(componentClass);
 
 		WebTarget webTarget = client.target(HTTP_LOCALHOST_9998);
 
@@ -163,9 +143,7 @@ public enum AssertionsREST {
 			webTarget = webTarget.queryParam(assertRestPO.getQueryParamName(), assertRestPO.getQueryParamValues());
 		}
 
-		final Invocation.Builder invocationBuilder = webTarget.request(assertRestPO.getAcceptedResponseMediaTypes());
-
-		return invocationBuilder.get(transferObjectClass);
+		return webTarget.request(assertRestPO.getAcceptedResponseMediaTypes());
 	}
 
 	// public static <OBJECT> OBJECT assertPOST(final Class<OBJECT> returnType,
