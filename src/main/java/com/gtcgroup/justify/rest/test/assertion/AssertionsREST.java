@@ -27,6 +27,7 @@
 package com.gtcgroup.justify.rest.test.assertion;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -123,9 +124,9 @@ public enum AssertionsREST {
 	private static Invocation.Builder instantiateInvocationBuilder(final JstAssertRestPO assertRestPO) {
 		final ClientConfig clientConfig = assertRestPO.getClientConfig();
 
-		for (final Class<?> filter : assertRestPO.getClientProviderList()) {
+		for (final Class<?> providerClass : assertRestPO.getProviderForRegistrationList()) {
 
-			clientConfig.register(filter);
+			clientConfig.register(providerClass);
 		}
 
 		final Client client = ClientBuilder.newClient(clientConfig);
@@ -140,7 +141,11 @@ public enum AssertionsREST {
 		}
 
 		if (assertRestPO.containsQueryParam()) {
-			webTarget = webTarget.queryParam(assertRestPO.getQueryParamName(), assertRestPO.getQueryParamValues());
+
+			for (final Map.Entry<String, Object[]> entry : assertRestPO.getQueryParamMap().entrySet()) {
+
+				webTarget = webTarget.queryParam(entry.getKey(), entry.getValue());
+			}
 		}
 
 		return webTarget.request(assertRestPO.getAcceptedResponseMediaTypes());

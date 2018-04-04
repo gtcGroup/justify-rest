@@ -30,6 +30,11 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.ws.rs.core.MediaType;
 
 import org.junit.jupiter.api.Assertions;
@@ -94,18 +99,28 @@ public class JstConfigureTestRestGetTest {
 		});
 	}
 
+	@SuppressWarnings("boxing")
 	@Test
 	public void testQueryParamsIC() {
 
+		final List<String> detailList = new ArrayList<>();
+		detailList.add("List Entry One");
+		detailList.add("List Entry Two");
+
+		final Map<String, Object> queryParamMap = new HashMap<>();
+		queryParamMap.put("from", 1);
+		queryParamMap.put("to", new Integer(2));
+		queryParamMap.put("detailList", detailList);
+
 		assertAll(() -> {
-			AssertionsREST.assertSingleGET(String.class,
-					JstAssertRestPO.withAcceptedResponseMediaTypes().withRequestPath("values"));
+			assertTrue(AssertionsREST.assertSingleGET(String.class,
+					JstAssertRestPO.withAcceptedResponseMediaTypes().withRequestPath("query/param1")
+							.withLogRequestDefaultFilter().withLogResponseDefaultFilter()
+							.withQueryParamMap(queryParamMap))
+					.contains("detailList"));
 
-			AssertionsREST.assertSingleGET(String.class,
-					JstAssertRestPO.withAcceptedResponseMediaTypes().withRequestPath("values"));
-
-			AssertionsREST.assertSingleGET(String.class,
-					JstAssertRestPO.withAcceptedResponseMediaTypes().withRequestPath("values"));
+			AssertionsREST.assertSingleGET(String.class, JstAssertRestPO.withAcceptedResponseMediaTypes()
+					.withRequestPath("query/param2").withLogRequestDefaultFilter().withLogResponseDefaultFilter());
 		});
 	}
 

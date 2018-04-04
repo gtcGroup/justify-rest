@@ -32,9 +32,7 @@ import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 
 import com.gtcgroup.justify.rest.test.JstBaseIC;
 
@@ -55,39 +53,25 @@ public class QueryParamIC extends JstBaseIC {
 
 	@GET
 	@Path("/param1")
-	public Response getData(@QueryParam("from") final int from, @QueryParam("to") final int to,
+	public Response getData(@QueryParam("from") final int from, @QueryParam("to") final Integer to,
 			@QueryParam("detailList") final List<String> detailList) {
 
-		return Response.status(200)
-				.entity("getUsers is called, from : " + from + ", to : " + to + ", detailList" + detailList.toString())
-				.build();
+		final HelloTO helloTO = new HelloTO();
+		helloTO.setText("method: getData(), from : " + from + ", to : " + to + ", detailList" + detailList.toString());
 
+		return Response.status(200).entity(helloTO).build();
 	}
 
 	@GET
 	@Path("/param2")
-	public Response getData(@Context final UriInfo info) {
-
-		final String from = info.getQueryParameters().getFirst("from");
-		final String to = info.getQueryParameters().getFirst("to");
-		final List<String> detailList = info.getQueryParameters().get("detailList");
-
-		return Response.status(200)
-				.entity("getUsers is called, from : " + from + ", to : " + to + ", detailList" + detailList.toString())
-				.build();
-
-	}
-
-	@GET
-	@Path("/param3")
 	public Response getDefaults(@DefaultValue("1000") @QueryParam("from") final int from,
-			@DefaultValue("999") @QueryParam("to") final int to,
-			@DefaultValue("name") @QueryParam("detailList") final List<String> detailList) {
+			@DefaultValue("999") @QueryParam("to") final Integer to,
+			@DefaultValue("Single Default Entry") @QueryParam("detailList") final List<String> detailList) {
 
-		return Response.status(200)
-				.entity("getUsers is called, from : " + from + ", to : " + to + ", detailList" + detailList.toString())
-				.build();
+		final HelloTO helloTO = new HelloTO();
+		helloTO.setText(
+				"method: getDefaults(), from : " + from + ", to : " + to + ", detailList" + detailList.toString());
 
+		return Response.ok(helloTO).build();
 	}
-
 }

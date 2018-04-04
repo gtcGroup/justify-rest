@@ -53,7 +53,7 @@ public class ConcreteConfigureTestRestPO extends JstConfigureTestRestPO {
 	@Override
 	protected ResourceConfig instantiateResourceConfigTM() {
 
-		return new ResourceConfig(ValuesIC.class, HelloIC.class);
+		return new ResourceConfig(ValuesIC.class, HelloIC.class, QueryParamIC.class);
 	}
 
 	@Override

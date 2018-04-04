@@ -27,9 +27,9 @@ package com.gtcgroup.justify.rest.test.assertion;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-import javax.ws.rs.client.ClientRequestFilter;
-import javax.ws.rs.client.ClientResponseFilter;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
@@ -59,6 +59,8 @@ public class JstAssertRestPO extends JstBasePO {
 	}
 
 	/**
+	 * This method provides a default of {@link MediaType}APPLICATION_JSON_TYPE.
+	 *
 	 * @return {@link JstAssertRestPO}
 	 */
 	public static JstAssertRestPO withAcceptedResponseMediaTypes() {
@@ -76,15 +78,13 @@ public class JstAssertRestPO extends JstBasePO {
 
 	private ClientConfig clientConfig = new ClientConfig();
 
-	private final List<Class<?>> clientProviderList = new ArrayList<>();
+	private final List<Class<?>> providerForRegistrationList = new ArrayList<>();
 
 	private WebTarget webTarget;
 
 	private String webTargetPath;
 
-	private String queryParamName;
-
-	private Object[] queryParamValues;
+	private final Map<String, Object[]> queryParamMap = new ConcurrentHashMap<>();
 
 	private String[] acceptedResponseMediaTypes;
 
@@ -110,44 +110,8 @@ public class JstAssertRestPO extends JstBasePO {
 	 * @return {@link JstAssertRestPO}
 	 */
 	@SuppressWarnings("unchecked")
-	public <FILTER extends ClientRequestFilter> JstAssertRestPO withClientRequestFilters(
-			final Class<FILTER>... clientRequestFilters) {
-
-		for (final Class<FILTER> clientFilter : clientRequestFilters) {
-			this.clientProviderList.add(clientFilter);
-		}
-		return this;
-	}
-
-	/**
-	 * @return {@link JstAssertRestPO}
-	 */
-	@SuppressWarnings("unchecked")
-	public <FILTER extends ClientResponseFilter> JstAssertRestPO withClientResponseFilters(
-			final Class<FILTER>... clientResponseFilters) {
-
-		for (final Class<FILTER> clientFilter : clientResponseFilters) {
-			this.clientProviderList.add(clientFilter);
-		}
-		return this;
-	}
-
-	/**
-	 * @return {@link JstAssertRestPO}
-	 */
-	@SuppressWarnings("unchecked")
 	public JstAssertRestPO withLogRequestDefaultFilter() {
-		withClientRequestFilters(JstLogRequestDefaultFilter.class);
-		return this;
-	}
-
-	/**
-	 * @return {@link JstAssertRestPO}
-	 */
-	@SuppressWarnings("unchecked")
-	public <FILTER extends ClientRequestFilter> JstAssertRestPO withLogRequestFilter(
-			final Class<FILTER> requestFilter) {
-		withClientRequestFilters(requestFilter);
+		withProvidersForRegistration(JstLogRequestDefaultFilter.class);
 		return this;
 	}
 
@@ -156,17 +120,7 @@ public class JstAssertRestPO extends JstBasePO {
 	 */
 	@SuppressWarnings("unchecked")
 	public JstAssertRestPO withLogResponseDefaultFilter() {
-		withClientResponseFilters(JstLogResponseDefaultFilter.class);
-		return this;
-	}
-
-	/**
-	 * @return {@link JstAssertRestPO}
-	 */
-	@SuppressWarnings("unchecked")
-	public <FILTER extends ClientResponseFilter> JstAssertRestPO withLogResponseFilter(
-			final Class<FILTER> responseFilter) {
-		withClientResponseFilters(responseFilter);
+		withProvidersForRegistration(JstLogResponseDefaultFilter.class);
 		return this;
 	}
 
@@ -181,9 +135,33 @@ public class JstAssertRestPO extends JstBasePO {
 	/**
 	 * @return {@link JstAssertRestPO}
 	 */
+	@SuppressWarnings("unchecked")
+	public <PROVIDER> JstAssertRestPO withProvidersForRegistration(final Class<PROVIDER>... providersForRegistration) {
+
+		for (final Class<PROVIDER> providerForRegistration : providersForRegistration) {
+			this.providerForRegistrationList.add(providerForRegistration);
+		}
+		return this;
+	}
+
+	/**
+	 * @return {@link JstAssertRestPO}
+	 */
 	public JstAssertRestPO withQueryParam(final String name, final String... values) {
-		this.queryParamName = name;
-		this.queryParamValues = values;
+		this.queryParamMap.put(name, values);
+		return this;
+
+	}
+
+	/**
+	 * @return {@link JstAssertRestPO}
+	 */
+	public JstAssertRestPO withQueryParamMap(final Map<String, Object> queryParamMap) {
+
+		for (final Map.Entry<String, Object> entry : queryParamMap.entrySet()) {
+
+			this.queryParamMap.put(entry.getKey(), new Object[] { entry.getValue() });
+		}
 		return this;
 
 	}
@@ -207,7 +185,7 @@ public class JstAssertRestPO extends JstBasePO {
 
 	protected boolean containsQueryParam() {
 
-		if (null == this.queryParamName || null == this.queryParamValues) {
+		if (this.queryParamMap.isEmpty()) {
 			return false;
 		}
 		return true;
@@ -225,16 +203,12 @@ public class JstAssertRestPO extends JstBasePO {
 		return this.clientConfig;
 	}
 
-	protected List<Class<?>> getClientProviderList() {
-		return this.clientProviderList;
+	protected List<Class<?>> getProviderForRegistrationList() {
+		return this.providerForRegistrationList;
 	}
 
-	protected String getQueryParamName() {
-		return this.queryParamName;
-	}
-
-	protected Object[] getQueryParamValues() {
-		return this.queryParamValues;
+	protected Map<String, Object[]> getQueryParamMap() {
+		return this.queryParamMap;
 	}
 
 	protected WebTarget getWebTarget() {
