@@ -26,6 +26,8 @@
 
 package com.gtcgroup.justify.rest.test.intentional.failure;
 
+import javax.ws.rs.client.Entity;
+
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -34,24 +36,32 @@ import com.gtcgroup.justify.rest.test.assertion.AssertionsREST;
 import com.gtcgroup.justify.rest.test.assertion.JstAssertRestPO;
 import com.gtcgroup.justify.rest.test.extension.JstConfigureTestREST;
 import com.gtcgroup.justify.rest.test.extension.dependency.ConcreteConfigureTestRestPO;
+import com.sun.research.ws.wadl.HTTPMethods;
 
 @SuppressWarnings("static-method")
 @Tag(value = "intentional")
 @JstConfigureTestLogToConsole()
 @JstConfigureTestREST(configureTestRestPO = ConcreteConfigureTestRestPO.class)
-public class Intentional2AssertionFailedTest {
+public class Intentional3AssertionFailedTest {
+
+	@Test
+	public void testGET_noBodyAllowed() {
+
+		AssertionsREST.assertSingle(String.class, JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString())
+				.withRequestPath("body").withEntity(Entity.text("Hello")));
+	}
+
+	@Test
+	public void testGET_parsingWithWrongResponseClass() {
+
+		AssertionsREST.assertSingle(Long.class,
+				JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString()).withRequestPath("values"));
+	}
 
 	@Test
 	public void testGET_requestPathException() {
 
-		AssertionsREST.assertSingleGET(String.class,
-				JstAssertRestPO.withAcceptedResponseMediaTypes().withRequestPath("fake"));
-	}
-
-	@Test
-	public void testGET_returnTypeException() {
-
-		AssertionsREST.assertSingleGET(Long.class,
-				JstAssertRestPO.withAcceptedResponseMediaTypes().withRequestPath("values"));
+		AssertionsREST.assertSingle(String.class,
+				JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString()).withRequestPath("fake"));
 	}
 }

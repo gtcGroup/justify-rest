@@ -28,6 +28,8 @@ package com.gtcgroup.justify.rest.test.extension.dependency;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import com.gtcgroup.justify.rest.test.JstBaseIC;
 
@@ -54,8 +56,15 @@ public class ValuesIC extends JstBaseIC {
 
 	@GET
 	@Path("/values")
-	// @Produces(MediaType.APPLICATION_JSON)
 	public String get() {
 		return this.values;
+	}
+
+	@SuppressWarnings("static-method")
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	@Path("/body")
+	public String get(final String hello) {
+		return hello;
 	}
 }

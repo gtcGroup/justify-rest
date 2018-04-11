@@ -34,7 +34,6 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.client.ClientConfig;
 import org.opentest4j.AssertionFailedError;
@@ -58,12 +57,11 @@ public enum AssertionsREST {
 
 	private static final String HTTP_LOCALHOST_9998 = "http://localhost:9998/";
 
-	@SuppressWarnings({ "unchecked" })
-	public static <LIST extends List<?>> LIST assertListGET(final JstAssertRestPO assertRestPO) {
+	public static List<?> assertList(final JstAssertRestPO assertRestPO) {
 
 		try {
 
-			return (LIST) buildListResponse(assertRestPO);
+			return buildListResponse(assertRestPO);
 
 		} catch (final Exception e) {
 			throwAssertFailedWithMessage(HTTPMethods.GET.toString(), assertRestPO, e.getMessage());
@@ -72,8 +70,7 @@ public enum AssertionsREST {
 
 	}
 
-	public static <OBJECT> OBJECT assertSingleGET(final Class<OBJECT> responseClass,
-			final JstAssertRestPO assertRestPO) {
+	public static <OBJECT> OBJECT assertSingle(final Class<OBJECT> responseClass, final JstAssertRestPO assertRestPO) {
 
 		OBJECT responseInstance = null;
 		try {
@@ -90,24 +87,24 @@ public enum AssertionsREST {
 		return responseInstance;
 	}
 
-	@SuppressWarnings("resource")
 	private static List<?> buildListResponse(final JstAssertRestPO assertRestPO) {
+
+		List<?> responseList = null;
 
 		final Invocation.Builder invocationBuilder = instantiateInvocationBuilder(assertRestPO);
 
 		// TODO: Consider for future implementation.
 		// invocationBuilder.header(name, value);
 
-		final Response response = invocationBuilder.get();
-		List<?> responseList = null;
-
-		if (null == response) {
-			throwAssertFailedWithMessage(HTTPMethods.GET.toString(), assertRestPO, "The response is null.");
+		if (assertRestPO.containsEnity()) {
+			responseList = (List<?>) invocationBuilder.method(assertRestPO.getHttpMethod(), assertRestPO.getEntity(),
+					GenericType.class);
 		} else {
+			responseList = (List<?>) invocationBuilder.method(assertRestPO.getHttpMethod(), Object.class);
+		}
 
-			responseList = response.readEntity(new GenericType<List<?>>() {
-				// Empty Block
-			});
+		if (null == responseList) {
+			throwAssertFailedWithMessage(HTTPMethods.GET.toString(), assertRestPO, "The response is null.");
 		}
 
 		return responseList;
@@ -118,7 +115,11 @@ public enum AssertionsREST {
 
 		final Invocation.Builder invocationBuilder = instantiateInvocationBuilder(assertRestPO);
 
-		return invocationBuilder.get(responseClass);
+		if (assertRestPO.containsEnity()) {
+			return invocationBuilder.method(assertRestPO.getHttpMethod(), assertRestPO.getEntity(), responseClass);
+		}
+
+		return invocationBuilder.method(assertRestPO.getHttpMethod(), responseClass);
 	}
 
 	private static Invocation.Builder instantiateInvocationBuilder(final JstAssertRestPO assertRestPO) {
@@ -185,7 +186,7 @@ public enum AssertionsREST {
 			assertionFailedMessage.append("] and ");
 		}
 
-		assertionFailedMessage.append("return type [");
+		assertionFailedMessage.append("response type [");
 
 		for (final String mediaTypes : assertRestPO.getAcceptedResponseMediaTypes()) {
 			assertionFailedMessage.append(mediaTypes);

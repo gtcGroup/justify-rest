@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
@@ -59,22 +60,14 @@ public class JstAssertRestPO extends JstBasePO {
 	}
 
 	/**
-	 * This method provides a default of {@link MediaType}APPLICATION_JSON_TYPE.
-	 *
 	 * @return {@link JstAssertRestPO}
 	 */
-	public static JstAssertRestPO withAcceptedResponseMediaTypes() {
+	public static JstAssertRestPO withHttpMethod(final String httpMethod) {
 
-		return new JstAssertRestPO(new String[] { MediaType.APPLICATION_JSON_TYPE.toString() });
+		return new JstAssertRestPO(httpMethod);
 	}
 
-	/**
-	 * @return {@link JstAssertRestPO}
-	 */
-	public static JstAssertRestPO withAcceptedResponseMediaTypes(final String... acceptedResponseMediaTypes) {
-
-		return new JstAssertRestPO(acceptedResponseMediaTypes);
-	}
+	private String httpMethod;
 
 	private ClientConfig clientConfig = new ClientConfig();
 
@@ -88,14 +81,28 @@ public class JstAssertRestPO extends JstBasePO {
 
 	private String[] acceptedResponseMediaTypes;
 
+	private Entity<?> entity;
+
 	/**
 	 * Constructor
 	 */
-	protected JstAssertRestPO(final String[] acceptedResponseMediaTypes) {
+	protected JstAssertRestPO(final String httpMethod) {
 
 		super();
-		this.acceptedResponseMediaTypes = acceptedResponseMediaTypes;
+		this.httpMethod = httpMethod;
 		return;
+	}
+
+	/**
+	 * This corresponding get method provides a default of
+	 * {@link MediaType}APPLICATION_JSON_TYPE.
+	 *
+	 * @return {@link JstAssertRestPO}
+	 */
+	public JstAssertRestPO withAcceptedResponseMediaTypes(final String... acceptedResponseMediaTypes) {
+
+		this.acceptedResponseMediaTypes = acceptedResponseMediaTypes;
+		return this;
 	}
 
 	/**
@@ -109,9 +116,8 @@ public class JstAssertRestPO extends JstBasePO {
 	/**
 	 * @return {@link JstAssertRestPO}
 	 */
-	@SuppressWarnings("unchecked")
-	public JstAssertRestPO withLogRequestDefaultFilter() {
-		withProvidersForRegistration(JstLogRequestDefaultFilter.class);
+	public JstAssertRestPO withEntity(final Entity<?> entity) {
+		this.entity = entity;
 		return this;
 	}
 
@@ -119,8 +125,33 @@ public class JstAssertRestPO extends JstBasePO {
 	 * @return {@link JstAssertRestPO}
 	 */
 	@SuppressWarnings("unchecked")
-	public JstAssertRestPO withLogResponseDefaultFilter() {
-		withProvidersForRegistration(JstLogResponseDefaultFilter.class);
+	public JstAssertRestPO withLogRequestFilter(final Class<?>... filtersForRegistration) {
+
+		if (0 == filtersForRegistration.length) {
+
+			withProvidersForRegistration(JstLogRequestDefaultFilter.class);
+		} else {
+
+			withProvidersForRegistration(filtersForRegistration);
+		}
+
+		return this;
+	}
+
+	/**
+	 * @return {@link JstAssertRestPO}
+	 */
+	@SuppressWarnings("unchecked")
+	public JstAssertRestPO withLogResponseFilter(final Class<?>... filtersForRegistration) {
+
+		if (0 == filtersForRegistration.length) {
+
+			withProvidersForRegistration(JstLogResponseDefaultFilter.class);
+		} else {
+
+			withProvidersForRegistration(filtersForRegistration);
+		}
+
 		return this;
 	}
 
@@ -175,12 +206,12 @@ public class JstAssertRestPO extends JstBasePO {
 		return this;
 	}
 
-	/**
-	 * @return {@link JstAssertRestPO}
-	 */
-	public JstAssertRestPO withWebTarget(final WebTarget webTarget) {
-		this.webTarget = webTarget;
-		return this;
+	protected boolean containsEnity() {
+
+		if (null == this.entity) {
+			return false;
+		}
+		return true;
 	}
 
 	protected boolean containsQueryParam() {
@@ -196,11 +227,24 @@ public class JstAssertRestPO extends JstBasePO {
 	}
 
 	protected String[] getAcceptedResponseMediaTypes() {
+
+		if (null == this.acceptedResponseMediaTypes) {
+			this.acceptedResponseMediaTypes = new String[] { MediaType.APPLICATION_JSON_TYPE.toString() };
+		}
+
 		return this.acceptedResponseMediaTypes;
 	}
 
 	protected ClientConfig getClientConfig() {
 		return this.clientConfig;
+	}
+
+	protected Entity<?> getEntity() {
+		return this.entity;
+	}
+
+	protected String getHttpMethod() {
+		return this.httpMethod;
 	}
 
 	protected List<Class<?>> getProviderForRegistrationList() {
