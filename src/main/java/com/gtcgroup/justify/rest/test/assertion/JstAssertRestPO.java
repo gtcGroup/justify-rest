@@ -53,7 +53,9 @@ import com.gtcgroup.justify.rest.filter.JstLogResponseDefaultFilter;
  */
 public class JstAssertRestPO extends JstBasePO {
 
-	private static int maxEntityLoggingSize = 8 * 1024;
+	private static final int MAX_ENTITY_LOGGING_SIZE = 8 * 1024;
+
+	private static int maxEntityLoggingSize;
 
 	public static int getMaxEntityLoggingSize() {
 		return maxEntityLoggingSize;
@@ -89,6 +91,7 @@ public class JstAssertRestPO extends JstBasePO {
 	protected JstAssertRestPO(final String httpMethod) {
 
 		super();
+		JstAssertRestPO.maxEntityLoggingSize = JstAssertRestPO.MAX_ENTITY_LOGGING_SIZE;
 		this.httpMethod = httpMethod;
 		return;
 	}

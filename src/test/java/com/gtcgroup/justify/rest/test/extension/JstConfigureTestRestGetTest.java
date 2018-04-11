@@ -140,7 +140,8 @@ public class JstConfigureTestRestGetTest {
 			assertTrue(AssertionsREST.assertSingle(String.class,
 					JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString()).withRequestPath("query/param1")
 							.withLogRequestFilter().withLogResponseFilter().withQueryParam("from", "1")
-							.withQueryParam("to", "2").withQueryParam("detailList", "List Entry One, List Entry Two"))
+							.withQueryParam("to", "2").withQueryParam("detailList", "List Entry One, List Entry Two")
+							.withMaxEntityLoggingSize(15))
 					.contains("detailList"));
 
 			AssertionsREST.assertSingle(String.class,
