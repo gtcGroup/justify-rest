@@ -25,16 +25,8 @@
  */
 package com.gtcgroup.justify.rest.test.extension;
 
-import java.util.function.Function;
-import java.util.function.Supplier;
-
-import javax.ws.rs.core.Application;
-
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.grizzly.GrizzlyTestContainerFactory;
-import org.junit.jupiter.api.extension.ExtensionContext;
-
-import com.gtcgroup.justify.core.test.extension.JstBaseExtension;
 
 /**
  * This Parameter Object class supports configuring an
@@ -50,56 +42,12 @@ import com.gtcgroup.justify.core.test.extension.JstBaseExtension;
  */
 public abstract class JstConfigureTestRestPO {
 
-	private Function<ExtensionContext, Application> applicationProvider;
-
-	private Supplier<Application> applicationSupplier;
-
 	private ResourceConfig resourceConfig;
-
-	private final boolean isConnectionString = false;
-
-	private boolean isFirstInvocation = true;
-
-	public Function<ExtensionContext, Application> getApplicationProvider() {
-		this.applicationProvider = populateApplicationProviderTM();
-		return this.applicationProvider;
-	}
-
-	public Supplier<Application> getApplicationSuplier() {
-		this.applicationSupplier = populateApplicationSupplierTM();
-		return this.applicationSupplier;
-	}
 
 	public ResourceConfig getResourceConfig() {
 		this.resourceConfig = instantiateResourceConfigTM();
 		return this.resourceConfig;
 	}
 
-	boolean isConnectionString() {
-		return this.isConnectionString;
-	}
-
-	/**
-	 * This method changes the value upon the first invocation. It is intended for
-	 * use by a subclass of {@link JstBaseExtension}.
-	 *
-	 * @return
-	 */
-	boolean isFirstInvocation() {
-
-		boolean returnValue = false;
-
-		if (this.isFirstInvocation) {
-
-			returnValue = true;
-			this.isFirstInvocation = false;
-		}
-		return returnValue;
-	}
-
 	protected abstract ResourceConfig instantiateResourceConfigTM();
-
-	protected abstract Function<ExtensionContext, Application> populateApplicationProviderTM();
-
-	protected abstract Supplier<Application> populateApplicationSupplierTM();
 }

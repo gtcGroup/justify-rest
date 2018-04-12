@@ -1,7 +1,6 @@
 package com.gtcgroup.justify.rest.test.extension;
 
-import org.glassfish.jersey.test.JerseyTest;
-import org.glassfish.jersey.test.TestProperties;
+import org.glassfish.jersey.test.spi.TestContainer;
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -11,13 +10,12 @@ import com.gtcgroup.justify.rest.test.helper.JstRestCacheHelper;
 
 public class ConfigureTestRestExtension extends JstBaseExtension implements BeforeAllCallback, AfterAllCallback {
 
-	// TODO: Consider eliminating JerseyTest?
-	private JerseyTest jerseyTest;
+	private TestContainer testContainer;
 
 	@Override
 	public void afterAll(final ExtensionContext context) throws Exception {
 
-		this.jerseyTest.tearDown();
+		this.testContainer.stop();
 	}
 
 	@Override
@@ -29,8 +27,7 @@ public class ConfigureTestRestExtension extends JstBaseExtension implements Befo
 
 			final JstConfigureTestRestPO configureTestRestInstancePO = configureTestRestClassPO.newInstance();
 
-			this.jerseyTest = JstRestCacheHelper.initializeJerseyTest(configureTestRestInstancePO,
-					TestProperties.LOG_TRAFFIC, TestProperties.DUMP_ENTITY);
+			this.testContainer = JstRestCacheHelper.initializeTestContainer(configureTestRestInstancePO);
 
 		} catch (final RuntimeException runtimeException) {
 			handleBeforeAllException(extensionContext, runtimeException);

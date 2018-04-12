@@ -26,6 +26,7 @@
 
 package com.gtcgroup.justify.rest.test.assertion;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -55,13 +56,11 @@ public enum AssertionsREST {
 
 	INSTANCE;
 
-	private static final String HTTP_LOCALHOST_9998 = "http://localhost:9998/";
-
 	public static List<?> assertList(final JstAssertRestPO assertRestPO) {
 
 		try {
 
-			return buildListResponse(assertRestPO);
+			return buildResponseList(assertRestPO);
 
 		} catch (final Exception e) {
 			throwAssertFailedWithMessage(HTTPMethods.GET.toString(), assertRestPO, e.getMessage());
@@ -75,21 +74,18 @@ public enum AssertionsREST {
 		OBJECT responseInstance = null;
 		try {
 
-			responseInstance = buildSingleResponse(responseClass, assertRestPO);
+			responseInstance = buildResponseSingle(responseClass, assertRestPO);
 
 		} catch (final Exception e) {
 			throwAssertFailedWithMessage(HTTPMethods.GET.toString(), assertRestPO, e.getMessage());
 		}
 
-		if (null == responseInstance) {
-			throwAssertFailedWithMessage(HTTPMethods.GET.toString(), assertRestPO, "The response is null.");
-		}
 		return responseInstance;
 	}
 
-	private static List<?> buildListResponse(final JstAssertRestPO assertRestPO) {
+	private static List<?> buildResponseList(final JstAssertRestPO assertRestPO) {
 
-		List<?> responseList = null;
+		List<?> responseList = new ArrayList<>();
 
 		final Invocation.Builder invocationBuilder = instantiateInvocationBuilder(assertRestPO);
 
@@ -103,14 +99,10 @@ public enum AssertionsREST {
 			responseList = (List<?>) invocationBuilder.method(assertRestPO.getHttpMethod(), Object.class);
 		}
 
-		if (null == responseList) {
-			throwAssertFailedWithMessage(HTTPMethods.GET.toString(), assertRestPO, "The response is null.");
-		}
-
 		return responseList;
 	}
 
-	private static <OBJECT> OBJECT buildSingleResponse(final Class<OBJECT> responseClass,
+	private static <OBJECT> OBJECT buildResponseSingle(final Class<OBJECT> responseClass,
 			final JstAssertRestPO assertRestPO) {
 
 		final Invocation.Builder invocationBuilder = instantiateInvocationBuilder(assertRestPO);
@@ -135,10 +127,10 @@ public enum AssertionsREST {
 		// TODO: Consider for future implementation.
 		// client.register(componentClass);
 
-		WebTarget webTarget = client.target(HTTP_LOCALHOST_9998);
+		WebTarget webTarget = client.target(assertRestPO.getTargetURI());
 
-		if (assertRestPO.containsWebTargetPath()) {
-			webTarget = webTarget.path(assertRestPO.getWebTargetPath());
+		if (assertRestPO.containsPath()) {
+			webTarget = webTarget.path(assertRestPO.getPath());
 		}
 
 		if (assertRestPO.containsQueryParam()) {
@@ -180,9 +172,9 @@ public enum AssertionsREST {
 		assertionFailedMessage.append(methodType);
 		assertionFailedMessage.append("] method with ");
 
-		if (assertRestPO.containsWebTargetPath()) {
+		if (assertRestPO.containsPath()) {
 			assertionFailedMessage.append("target path [");
-			assertionFailedMessage.append(HTTP_LOCALHOST_9998 + assertRestPO.getWebTargetPath());
+			assertionFailedMessage.append(assertRestPO.getTargetURI() + assertRestPO.getPath());
 			assertionFailedMessage.append("] and ");
 		}
 

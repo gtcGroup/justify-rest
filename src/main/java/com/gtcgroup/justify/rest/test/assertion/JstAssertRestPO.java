@@ -31,7 +31,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
 import org.glassfish.jersey.client.ClientConfig;
@@ -39,6 +38,7 @@ import org.glassfish.jersey.client.ClientConfig;
 import com.gtcgroup.justify.core.base.JstBasePO;
 import com.gtcgroup.justify.rest.filter.JstLogRequestDefaultFilter;
 import com.gtcgroup.justify.rest.filter.JstLogResponseDefaultFilter;
+import com.gtcgroup.justify.rest.test.helper.JstRestCacheHelper;
 
 /**
  * This Parameter Object class supports JAX-RS testing assertions.
@@ -69,17 +69,17 @@ public class JstAssertRestPO extends JstBasePO {
 		return new JstAssertRestPO(httpMethod);
 	}
 
-	private String httpMethod;
-
-	private ClientConfig clientConfig = new ClientConfig();
+	private final Map<String, Object[]> queryParamMap = new ConcurrentHashMap<>();
 
 	private final List<Class<?>> providerForRegistrationList = new ArrayList<>();
 
-	private WebTarget webTarget;
+	private ClientConfig clientConfig = new ClientConfig();
 
-	private String webTargetPath;
+	private String targetURI = JstRestCacheHelper.DEFAULT_TARGET_URI;
 
-	private final Map<String, Object[]> queryParamMap = new ConcurrentHashMap<>();
+	private String httpMethod;
+
+	private String path;
 
 	private String[] acceptedResponseMediaTypes;
 
@@ -169,6 +169,15 @@ public class JstAssertRestPO extends JstBasePO {
 	/**
 	 * @return {@link JstAssertRestPO}
 	 */
+	public JstAssertRestPO withPath(final String requestTargetPath) {
+
+		this.path = requestTargetPath;
+		return this;
+	}
+
+	/**
+	 * @return {@link JstAssertRestPO}
+	 */
 	@SuppressWarnings("unchecked")
 	public <PROVIDER> JstAssertRestPO withProvidersForRegistration(final Class<PROVIDER>... providersForRegistration) {
 
@@ -203,9 +212,9 @@ public class JstAssertRestPO extends JstBasePO {
 	/**
 	 * @return {@link JstAssertRestPO}
 	 */
-	public JstAssertRestPO withRequestPath(final String requestPath) {
+	public JstAssertRestPO withTargetURI(final String targetURI) {
 
-		this.webTargetPath = requestPath;
+		this.targetURI = targetURI;
 		return this;
 	}
 
@@ -217,16 +226,16 @@ public class JstAssertRestPO extends JstBasePO {
 		return true;
 	}
 
+	protected boolean containsPath() {
+		return null != this.path;
+	}
+
 	protected boolean containsQueryParam() {
 
 		if (this.queryParamMap.isEmpty()) {
 			return false;
 		}
 		return true;
-	}
-
-	protected boolean containsWebTargetPath() {
-		return null != this.webTargetPath;
 	}
 
 	protected String[] getAcceptedResponseMediaTypes() {
@@ -250,6 +259,14 @@ public class JstAssertRestPO extends JstBasePO {
 		return this.httpMethod;
 	}
 
+	/**
+	 * @return {@link String}
+	 */
+	protected String getPath() {
+
+		return this.path;
+	}
+
 	protected List<Class<?>> getProviderForRegistrationList() {
 		return this.providerForRegistrationList;
 	}
@@ -258,19 +275,7 @@ public class JstAssertRestPO extends JstBasePO {
 		return this.queryParamMap;
 	}
 
-	protected WebTarget getWebTarget() {
-		return this.webTarget;
-	}
-
-	/**
-	 * @return {@link String}
-	 */
-	protected String getWebTargetPath() {
-
-		return this.webTargetPath;
-	}
-
-	protected boolean isWebTarget() {
-		return null == this.webTarget;
+	protected String getTargetURI() {
+		return this.targetURI;
 	}
 }

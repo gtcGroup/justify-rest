@@ -26,11 +26,14 @@
 
 package com.gtcgroup.justify.rest.test.helper;
 
-import java.util.Optional;
+import java.net.URI;
 
-import org.glassfish.jersey.test.JerseyTest;
+import org.glassfish.jersey.internal.ServiceFinder;
+import org.glassfish.jersey.test.DeploymentContext;
+import org.glassfish.jersey.test.TestProperties;
+import org.glassfish.jersey.test.spi.TestContainer;
+import org.glassfish.jersey.test.spi.TestContainerFactory;
 
-import com.gtcgroup.justify.rest.test.JstJerseyTest;
 import com.gtcgroup.justify.rest.test.extension.JstConfigureTestRestPO;
 
 /**
@@ -49,46 +52,61 @@ public enum JstRestCacheHelper {
 	/** Instance */
 	INSTANCE;
 
-	private static JerseyTest jerseyTestCached;
-	// private static Map<String, JerseyTest> jerseyTestMap = new
-	// ConcurrentHashMap<>();
+	public static final String DEFAULT_TARGET_URI = "http://localhost:9998/";
 
 	/**
-	 * This method returns a cached {@link JerseyTest} instance.
-	 *
-	 * @return {@link Optional}
+	 * @return {@link TestContainer}
 	 */
-	public static JerseyTest initializeJerseyTest(final JstConfigureTestRestPO configureTestRestPO,
-			final String... featureNames) {
+	public static TestContainer initializeTestContainer(final JstConfigureTestRestPO configureTestRestPO) {
 
-		final JstJerseyTest jerseyTest = new JstJerseyTest(configureTestRestPO.getResourceConfig());
+		TestContainer testContainer = null;
 
 		try {
-			jerseyTest.setUp();
+			testContainer = startContainer(configureTestRestPO);
 		} catch (final Exception e) {
 
-			try {
-				jerseyTest.tearDown();
-			} catch (final Exception e1) {
-
-				e1.printStackTrace();
-			}
-
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			stopContainer(testContainer, e);
 		}
 
-		jerseyTest.enable(featureNames);
-
-		jerseyTestCached = jerseyTest;
-
-		// if (isFirstUseOfFactory) {
-		// return Optional.of(configureTestInstancePO);
-		// }
-		return jerseyTest;
+		return testContainer;
 	}
 
-	public static JerseyTest retrieveJerseyTest() {
-		return jerseyTestCached;
+	private static synchronized TestContainerFactory findDefaultTestContainerFactory() {
+
+		final TestContainerFactory[] factories = ServiceFinder.find(TestContainerFactory.class).toArray();
+
+		for (final TestContainerFactory testContainerFactory : factories) {
+			if (TestProperties.DEFAULT_CONTAINER_FACTORY.equals(testContainerFactory.getClass().getName())) {
+				return testContainerFactory;
+			}
+		}
+		return null;
+	}
+
+	private static TestContainer startContainer(final JstConfigureTestRestPO configureTestRestPO) throws Exception {
+
+		final DeploymentContext deploymentContext = DeploymentContext.builder(configureTestRestPO.getResourceConfig())
+				.build();
+
+		final TestContainerFactory testContainerFactory = findDefaultTestContainerFactory();
+
+		final TestContainer testContainer = testContainerFactory.create(URI.create(DEFAULT_TARGET_URI),
+				deploymentContext);
+
+		testContainer.start();
+
+		return testContainer;
+	}
+
+	private static void stopContainer(final TestContainer testContainer, final Exception e) {
+		try {
+			testContainer.stop();
+		} catch (final Exception e1) {
+
+			e1.printStackTrace();
+		}
+
+		// TODO Auto-generated catch block
+		e.printStackTrace();
 	}
 }

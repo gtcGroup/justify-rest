@@ -35,33 +35,33 @@ import com.gtcgroup.justify.core.test.extension.JstConfigureTestLogToConsole;
 import com.gtcgroup.justify.rest.test.assertion.AssertionsREST;
 import com.gtcgroup.justify.rest.test.assertion.JstAssertRestPO;
 import com.gtcgroup.justify.rest.test.extension.JstConfigureTestREST;
-import com.gtcgroup.justify.rest.test.extension.dependency.ConcreteConfigureTestRestPO;
+import com.gtcgroup.justify.rest.test.extension.dependency.ConcreteIntentionalTestRestPO;
 import com.sun.research.ws.wadl.HTTPMethods;
 
 @SuppressWarnings("static-method")
 @Tag(value = "intentional")
 @JstConfigureTestLogToConsole()
-@JstConfigureTestREST(configureTestRestPO = ConcreteConfigureTestRestPO.class)
+@JstConfigureTestREST(configureTestRestPO = ConcreteIntentionalTestRestPO.class)
 public class Intentional3AssertionFailedTest {
 
 	@Test
 	public void testGET_noBodyAllowed() {
 
 		AssertionsREST.assertSingle(String.class, JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString())
-				.withRequestPath("body").withEntity(Entity.text("Hello")));
+				.withPath("body").withEntity(Entity.text("Hello")));
 	}
 
 	@Test
 	public void testGET_parsingWithWrongResponseClass() {
 
 		AssertionsREST.assertSingle(Long.class,
-				JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString()).withRequestPath("values"));
+				JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString()).withPath("values"));
 	}
 
 	@Test
 	public void testGET_requestPathException() {
 
 		AssertionsREST.assertSingle(String.class,
-				JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString()).withRequestPath("fake"));
+				JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString()).withPath("fake"));
 	}
 }

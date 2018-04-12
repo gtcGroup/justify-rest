@@ -23,17 +23,16 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.gtcgroup.justify.rest.test;
+package com.gtcgroup.justify.rest.test.extension.dependency;
 
-import java.lang.reflect.Field;
-import java.util.Map;
+import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.test.grizzly.GrizzlyTestContainerFactory;
 
-import javax.ws.rs.core.Application;
-
-import org.glassfish.jersey.test.JerseyTest;
+import com.gtcgroup.justify.rest.test.extension.JstConfigureTestRestPO;
 
 /**
- * This concrete {@link JerseyTest} class supports JUnit 5.
+ * This Parameter Object class supports configuring an
+ * {@link GrizzlyTestContainerFactory}.
  *
  * <p style="font-family:Verdana; font-size:10px; font-style:italic">
  * Copyright (c) 2006 - 2018 by Global Technology Consulting Group, Inc. at
@@ -43,41 +42,11 @@ import org.glassfish.jersey.test.JerseyTest;
  * @author Marvin Toll
  * @since v.8.5
  */
-public class JstJerseyTest extends JerseyTest {
+public class ConcreteIntentionalTestRestPO extends JstConfigureTestRestPO {
 
-	public JstJerseyTest(final Application jaxrsApplication) {
-		super(jaxrsApplication);
-	}
+	@Override
+	protected ResourceConfig instantiateResourceConfigTM() {
 
-	// protected JstJerseyTest() {
-	// super();
-	// // TODO Auto-generated constructor stub
-	// }
-	//
-	// protected JstJerseyTest(final TestContainerFactory testContainerFactory) {
-	// super(testContainerFactory);
-	// // TODO Auto-generated constructor stub
-	// }
-
-	public void enable(final String... featureNames) {
-
-		try {
-			final Field field = JerseyTest.class.getDeclaredField("propertyMap");
-			field.setAccessible(true);
-
-			@SuppressWarnings("unchecked")
-			final Map<String, String> propertyMap = (Map<String, String>) field.get(this);
-			field.setAccessible(true);
-
-			for (final String featureName : featureNames) {
-
-				propertyMap.put(featureName, Boolean.TRUE.toString());
-			}
-
-		} catch (final Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+		return new ResourceConfig(BodyIC.class, ValuesIC.class);
 	}
 }

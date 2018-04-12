@@ -25,14 +25,8 @@
  */
 package com.gtcgroup.justify.rest.test.extension.dependency;
 
-import java.util.function.Function;
-import java.util.function.Supplier;
-
-import javax.ws.rs.core.Application;
-
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.grizzly.GrizzlyTestContainerFactory;
-import org.junit.jupiter.api.extension.ExtensionContext;
 
 import com.gtcgroup.justify.rest.test.extension.JstConfigureTestRestPO;
 
@@ -54,16 +48,5 @@ public class ConcreteConfigureTestRestPO extends JstConfigureTestRestPO {
 	protected ResourceConfig instantiateResourceConfigTM() {
 
 		return new ResourceConfig(ValuesIC.class, HelloIC.class, QueryParamIC.class);
-	}
-
-	@Override
-	protected Function<ExtensionContext, Application> populateApplicationProviderTM() {
-		return null;
-	}
-
-	@Override
-	protected Supplier<Application> populateApplicationSupplierTM() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

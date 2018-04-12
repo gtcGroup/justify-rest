@@ -27,7 +27,7 @@
 package com.gtcgroup.justify.rest.test.extension;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
@@ -38,6 +38,7 @@ import java.util.Map;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 
+import org.glassfish.jersey.client.ClientConfig;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
@@ -61,7 +62,7 @@ public class JstConfigureTestRestGetTest {
 
 		Assertions.assertThrows(AssertionFailedError.class, () -> {
 			AssertionsREST.assertSingle(String.class,
-					JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString()).withRequestPath("body")
+					JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString()).withPath("body")
 							.withEntity(Entity.entity("Hello", MediaType.TEXT_PLAIN))
 							.withAcceptedResponseMediaTypes(MediaType.TEXT_PLAIN));
 		});
@@ -73,7 +74,7 @@ public class JstConfigureTestRestGetTest {
 
 		Assertions.assertThrows(AssertionFailedError.class, () -> {
 			AssertionsREST.assertSingle(String.class,
-					JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString()).withRequestPath("fake"));
+					JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString()).withPath("fake"));
 		});
 	}
 
@@ -82,7 +83,7 @@ public class JstConfigureTestRestGetTest {
 
 		Assertions.assertThrows(AssertionFailedError.class, () -> {
 			AssertionsREST.assertSingle(Long.class,
-					JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString()).withRequestPath("values"));
+					JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString()).withPath("values"));
 		});
 	}
 
@@ -91,29 +92,27 @@ public class JstConfigureTestRestGetTest {
 
 		assertAll(() -> {
 
-			assertTrue(
-					AssertionsREST
-							.assertSingle(String.class,
-									JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString())
-											.withAcceptedResponseMediaTypes(MediaType.TEXT_HTML)
-											.withRequestPath("hello").withLogResponseFilter())
-							.contains("<h1>Hello Jersey</h1>"));
+			assertTrue(AssertionsREST.assertSingle(String.class,
+					JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString())
+							.withAcceptedResponseMediaTypes(MediaType.TEXT_HTML).withPath("hello")
+							.withLogResponseFilter())
+					.contains("<h1>Hello Jersey</h1>"));
 
 			assertTrue(AssertionsREST.assertSingle(String.class,
 					JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString())
-							.withAcceptedResponseMediaTypes(MediaType.TEXT_PLAIN).withRequestPath("hello")
+							.withAcceptedResponseMediaTypes(MediaType.TEXT_PLAIN).withPath("hello")
 							.withLogRequestFilter())
 					.contains("Hello Jersey"));
 
 			assertTrue(AssertionsREST
 					.assertSingle(String.class,
 							JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString())
-									.withAcceptedResponseMediaTypes(MediaType.TEXT_XML).withRequestPath("hello")
+									.withAcceptedResponseMediaTypes(MediaType.TEXT_XML).withPath("hello")
 									.withLogRequestFilter().withLogResponseFilter())
 					.contains("<hello>Hello Jersey</hello>"));
 
-			assertNotNull(AssertionsREST.assertList(JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString())
-					.withRequestPath("hello").withLogResponseFilter()));
+			assertFalse(AssertionsREST.assertList(JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString())
+					.withPath("hello").withLogResponseFilter()).isEmpty());
 		});
 	}
 
@@ -133,19 +132,19 @@ public class JstConfigureTestRestGetTest {
 		assertAll(() -> {
 			assertTrue(AssertionsREST
 					.assertSingle(String.class,
-							JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString()).withRequestPath("query/param1")
+							JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString()).withPath("query/param1")
 									.withLogRequestFilter().withLogResponseFilter().withQueryParamMap(queryParamMap))
 					.contains("detailList"));
 
 			assertTrue(AssertionsREST.assertSingle(String.class,
-					JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString()).withRequestPath("query/param1")
+					JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString()).withPath("query/param1")
 							.withLogRequestFilter().withLogResponseFilter().withQueryParam("from", "1")
 							.withQueryParam("to", "2").withQueryParam("detailList", "List Entry One, List Entry Two")
-							.withMaxEntityLoggingSize(15))
+							.withMaxEntityLoggingSize(15).withTargetURI("http://localhost:9998/"))
 					.contains("detailList"));
 
 			AssertionsREST.assertSingle(String.class,
-					JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString()).withRequestPath("query/param2")
+					JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString()).withPath("query/param2")
 							.withLogRequestFilter(JstLogRequestDefaultFilter.class)
 							.withLogResponseFilter(JstLogResponseDefaultFilter.class));
 		});
@@ -154,11 +153,11 @@ public class JstConfigureTestRestGetTest {
 	@Test
 	public void testValuesIC() {
 
-		assertTrue(AssertionsREST
-				.assertSingle(String.class,
-						JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString()).withRequestPath("values"))
-				.contains(ValuesIC.DEFAULT_VALUES));
+		assertTrue(
+				AssertionsREST
+						.assertSingle(String.class, JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString())
+								.withPath("values").withClientConfig(new ClientConfig()))
+						.contains(ValuesIC.DEFAULT_VALUES));
 
 	}
-
 }
