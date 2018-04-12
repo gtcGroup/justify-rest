@@ -30,7 +30,7 @@ public class ConfigureTestRestExtension extends JstBaseExtension implements Befo
 			this.testContainer = JstRestCacheHelper.initializeTestContainer(configureTestRestInstancePO);
 
 		} catch (final RuntimeException runtimeException) {
-			handleBeforeAllException(extensionContext, runtimeException);
+			handleBeforeAllException(extensionContext, runtimeException); // Tested
 		}
 	}
 

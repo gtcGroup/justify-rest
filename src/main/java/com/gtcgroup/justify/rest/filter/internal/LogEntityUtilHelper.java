@@ -10,28 +10,25 @@ public enum LogEntityUtilHelper {
 
 	INSTANCE;
 
-	public static void retrieveEntity(final StringBuilder message, final int maxEntitySize,
+	public static void retrieveEntity(final StringBuilder message, final int maxEntityLoggingSize,
 			final ClientResponseContext responseContext) throws IOException {
 
-		responseContext.setEntityStream(logInboundEntity(message, maxEntitySize, responseContext.getEntityStream()));
+		responseContext
+				.setEntityStream(logInboundEntity(message, maxEntityLoggingSize, responseContext.getEntityStream()));
 	}
 
-	private static InputStream logInboundEntity(final StringBuilder message, final int maxEntitySize,
+	private static InputStream logInboundEntity(final StringBuilder message, final int maxEntityLoggingSize,
 			final InputStream inputStream) throws IOException {
 
-		InputStream stream;
-
-		if (!inputStream.markSupported()) {
-			stream = new BufferedInputStream(inputStream);
-		} else {
-			stream = inputStream;
-		}
-		stream.mark(maxEntitySize + 1);
-		final byte[] entity = new byte[maxEntitySize + 1];
+		final InputStream stream = new BufferedInputStream(inputStream);
+		stream.mark(maxEntityLoggingSize + 1);
+		final byte[] entity = new byte[maxEntityLoggingSize + 1];
 		final int entitySize = stream.read(entity);
-		message.append(new String(entity, 0, Math.min(entitySize, maxEntitySize)));
-		if (entitySize > maxEntitySize) {
-			message.append("...more...");
+		message.append(new String(entity, 0, Math.min(entitySize, maxEntityLoggingSize)));
+		if (entitySize > maxEntityLoggingSize) {
+			message.append("... [");
+			message.append(maxEntityLoggingSize);
+			message.append(" maximum logging characters]");
 		}
 		stream.reset();
 		return stream;

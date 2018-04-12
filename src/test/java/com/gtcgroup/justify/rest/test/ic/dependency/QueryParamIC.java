@@ -24,7 +24,7 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.gtcgroup.justify.rest.test.extension.dependency;
+package com.gtcgroup.justify.rest.test.ic.dependency;
 
 import java.util.List;
 
@@ -35,6 +35,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 import com.gtcgroup.justify.rest.test.JstBaseIC;
+import com.gtcgroup.justify.rest.test.extension.dependency.HelloTO;
 
 /**
  * An I/O Controller class used for testing.

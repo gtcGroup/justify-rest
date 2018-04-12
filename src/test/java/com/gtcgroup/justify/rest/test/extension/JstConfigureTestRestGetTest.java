@@ -49,7 +49,7 @@ import com.gtcgroup.justify.rest.filter.JstLogResponseDefaultFilter;
 import com.gtcgroup.justify.rest.test.assertion.AssertionsREST;
 import com.gtcgroup.justify.rest.test.assertion.JstAssertRestPO;
 import com.gtcgroup.justify.rest.test.extension.dependency.ConcreteConfigureTestRestPO;
-import com.gtcgroup.justify.rest.test.extension.dependency.ValuesIC;
+import com.gtcgroup.justify.rest.test.ic.dependency.ValuesIC;
 import com.sun.research.ws.wadl.HTTPMethods;
 
 @SuppressWarnings("static-method")

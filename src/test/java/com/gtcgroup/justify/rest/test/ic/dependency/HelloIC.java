@@ -24,12 +24,20 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.gtcgroup.justify.rest.test.extension.dependency;
+package com.gtcgroup.justify.rest.test.ic.dependency;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.GenericEntity;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import com.gtcgroup.justify.rest.test.JstBaseIC;
+import com.gtcgroup.justify.rest.test.extension.dependency.HelloTO;
 
 /**
  * An I/O Controller class used for testing.
@@ -42,19 +50,52 @@ import com.gtcgroup.justify.rest.test.JstBaseIC;
  * @author Marvin Toll
  * @since v.8.5
  */
-@Path("")
-public class ValuesIC extends JstBaseIC {
+@SuppressWarnings("static-method")
+@Path("/hello")
+public class HelloIC extends JstBaseIC {
 
-	public static final String DEFAULT_VALUES = "value1, value2";
-	private final String values;
+	public static List<HelloTO> helloList = new ArrayList<>();
 
-	public ValuesIC() {
-		this.values = DEFAULT_VALUES;
+	static {
+		final HelloTO helloTO = new HelloTO();
+		helloTO.setText("The Same");
+
+		helloList.add(helloTO);
+		helloList.add(helloTO);
 	}
 
+	// This method is called if APPLICATION_JSON is request
 	@GET
-	@Path("/values")
-	public String get() {
-		return this.values;
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getItems() {
+
+		final GenericEntity<List<HelloTO>> genericEntity = new GenericEntity<List<HelloTO>>(helloList) {
+			// Empty Block
+		};
+
+		return Response.ok(genericEntity).type(MediaType.APPLICATION_JSON).build();
 	}
+
+	// This method is called if HTML is request
+	@GET
+	@Produces(MediaType.TEXT_HTML)
+	public String sayHtmlHello() {
+		return "<html>" + "<title>" + "Hello Jersey" + "</title>" + "<body><h1>" + "Hello Jersey" + "</h1></body>"
+				+ "</html>";
+	}
+
+	// This method is called if TEXT_PLAIN is request
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	public String sayPlainTextHello() {
+		return "Hello Jersey";
+	}
+
+	// This method is called if XML is request
+	@GET
+	@Produces(MediaType.TEXT_XML)
+	public String sayXMLHello() {
+		return "<?xml version=\"1.0\"?>" + "<hello>Hello Jersey" + "</hello>";
+	}
+
 }

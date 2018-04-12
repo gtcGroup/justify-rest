@@ -59,32 +59,6 @@ public enum JstRestCacheHelper {
 	 */
 	public static TestContainer initializeTestContainer(final JstConfigureTestRestPO configureTestRestPO) {
 
-		TestContainer testContainer = null;
-
-		try {
-			testContainer = startContainer(configureTestRestPO);
-		} catch (final Exception e) {
-
-			stopContainer(testContainer, e);
-		}
-
-		return testContainer;
-	}
-
-	private static synchronized TestContainerFactory findDefaultTestContainerFactory() {
-
-		final TestContainerFactory[] factories = ServiceFinder.find(TestContainerFactory.class).toArray();
-
-		for (final TestContainerFactory testContainerFactory : factories) {
-			if (TestProperties.DEFAULT_CONTAINER_FACTORY.equals(testContainerFactory.getClass().getName())) {
-				return testContainerFactory;
-			}
-		}
-		return null;
-	}
-
-	private static TestContainer startContainer(final JstConfigureTestRestPO configureTestRestPO) throws Exception {
-
 		final DeploymentContext deploymentContext = DeploymentContext.builder(configureTestRestPO.getResourceConfig())
 				.build();
 
@@ -98,15 +72,17 @@ public enum JstRestCacheHelper {
 		return testContainer;
 	}
 
-	private static void stopContainer(final TestContainer testContainer, final Exception e) {
-		try {
-			testContainer.stop();
-		} catch (final Exception e1) {
+	private static synchronized TestContainerFactory findDefaultTestContainerFactory() {
 
-			e1.printStackTrace();
+		final TestContainerFactory[] factories = ServiceFinder.find(TestContainerFactory.class).toArray();
+		TestContainerFactory testContainerFactory = null;
+
+		for (final TestContainerFactory containerFactory : factories) {
+			if (TestProperties.DEFAULT_CONTAINER_FACTORY.equals(containerFactory.getClass().getName())) {
+				testContainerFactory = containerFactory;
+				break;
+			}
 		}
-
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+		return testContainerFactory;
 	}
 }

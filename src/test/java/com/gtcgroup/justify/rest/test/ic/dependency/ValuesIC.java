@@ -24,16 +24,10 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.gtcgroup.justify.rest.test.extension.dependency;
-
-import java.util.List;
+package com.gtcgroup.justify.rest.test.ic.dependency;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 
 import com.gtcgroup.justify.rest.test.JstBaseIC;
 
@@ -48,33 +42,19 @@ import com.gtcgroup.justify.rest.test.JstBaseIC;
  * @author Marvin Toll
  * @since v.8.5
  */
-@Path("/query")
-@SuppressWarnings("static-method")
-public class PathParamIC extends JstBaseIC {
+@Path("")
+public class ValuesIC extends JstBaseIC {
 
-	@GET
-	@Path("/param1")
-	public Response getData(@QueryParam("from") final int from, @QueryParam("to") final int to,
-			@QueryParam("detailList") final List<String> detailList) {
+	public static final String DEFAULT_VALUES = "value1, value2";
+	private final String values;
 
-		return Response.status(200)
-				.entity("getUsers is called, from : " + from + ", to : " + to + ", detailList" + detailList.toString())
-				.build();
-
+	public ValuesIC() {
+		this.values = DEFAULT_VALUES;
 	}
 
 	@GET
-	@Path("/param2")
-	public Response getData(@Context final UriInfo info) {
-
-		final String from = info.getQueryParameters().getFirst("from");
-		final String to = info.getQueryParameters().getFirst("to");
-		final List<String> detailList = info.getQueryParameters().get("detailList");
-
-		return Response.status(200)
-				.entity("getUsers is called, from : " + from + ", to : " + to + ", detailList" + detailList.toString())
-				.build();
-
+	@Path("/values")
+	public String get() {
+		return this.values;
 	}
-
 }

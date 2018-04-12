@@ -63,7 +63,7 @@ public enum AssertionsREST {
 			return buildResponseList(assertRestPO);
 
 		} catch (final Exception e) {
-			throwAssertFailedWithMessage(HTTPMethods.GET.toString(), assertRestPO, e.getMessage());
+			throwAssertFailedWithMessage(HTTPMethods.GET.toString(), assertRestPO, e.getMessage()); // Tested
 		}
 		return null;
 

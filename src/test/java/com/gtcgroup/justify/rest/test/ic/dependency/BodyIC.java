@@ -24,7 +24,7 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.gtcgroup.justify.rest.test.extension.dependency;
+package com.gtcgroup.justify.rest.test.ic.dependency;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

@@ -26,13 +26,14 @@
 package com.gtcgroup.justify.rest.test.extension.dependency;
 
 import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.test.grizzly.GrizzlyTestContainerFactory;
 
 import com.gtcgroup.justify.rest.test.extension.JstConfigureTestRestPO;
+import com.gtcgroup.justify.rest.test.ic.dependency.HelloIC;
+import com.gtcgroup.justify.rest.test.ic.dependency.QueryParamIC;
+import com.gtcgroup.justify.rest.test.ic.dependency.ValuesIC;
 
 /**
- * This Parameter Object class supports configuring an
- * {@link GrizzlyTestContainerFactory}.
+ * This Parameter Object class supports configuration.
  *
  * <p style="font-family:Verdana; font-size:10px; font-style:italic">
  * Copyright (c) 2006 - 2018 by Global Technology Consulting Group, Inc. at
