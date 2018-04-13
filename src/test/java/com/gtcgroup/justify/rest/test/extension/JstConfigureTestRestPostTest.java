@@ -55,7 +55,7 @@ import com.sun.research.ws.wadl.HTTPMethods;
 @SuppressWarnings("static-method")
 @JstConfigureTestLogToConsole()
 @JstConfigureTestREST(configureTestRestPO = ConcreteConfigureTestRestPO.class)
-public class JstConfigureTestRestGetTest {
+public class JstConfigureTestRestPostTest {
 
 	@Test
 	public void testGET_enityException() {

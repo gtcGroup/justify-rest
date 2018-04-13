@@ -38,7 +38,7 @@ import org.glassfish.jersey.client.ClientConfig;
 import com.gtcgroup.justify.core.base.JstBasePO;
 import com.gtcgroup.justify.rest.filter.JstLogRequestDefaultFilter;
 import com.gtcgroup.justify.rest.filter.JstLogResponseDefaultFilter;
-import com.gtcgroup.justify.rest.test.helper.JstRestCacheHelper;
+import com.gtcgroup.justify.rest.test.helper.JstRestUtilHelper;
 
 /**
  * This Parameter Object class supports JAX-RS testing assertions.
@@ -75,7 +75,7 @@ public class JstAssertRestPO extends JstBasePO {
 
 	private ClientConfig clientConfig = new ClientConfig();
 
-	private String targetURI = JstRestCacheHelper.DEFAULT_TARGET_URI;
+	private String targetURI = JstRestUtilHelper.DEFAULT_TARGET_URI;
 
 	private String httpMethod;
 
@@ -127,7 +127,6 @@ public class JstAssertRestPO extends JstBasePO {
 	/**
 	 * @return {@link JstAssertRestPO}
 	 */
-	@SuppressWarnings("unchecked")
 	public JstAssertRestPO withLogRequestFilter(final Class<?>... filtersForRegistration) {
 
 		if (0 == filtersForRegistration.length) {
@@ -144,7 +143,6 @@ public class JstAssertRestPO extends JstBasePO {
 	/**
 	 * @return {@link JstAssertRestPO}
 	 */
-	@SuppressWarnings("unchecked")
 	public JstAssertRestPO withLogResponseFilter(final Class<?>... filtersForRegistration) {
 
 		if (0 == filtersForRegistration.length) {
@@ -178,10 +176,9 @@ public class JstAssertRestPO extends JstBasePO {
 	/**
 	 * @return {@link JstAssertRestPO}
 	 */
-	@SuppressWarnings("unchecked")
-	public <PROVIDER> JstAssertRestPO withProvidersForRegistration(final Class<PROVIDER>... providersForRegistration) {
+	public JstAssertRestPO withProvidersForRegistration(final Class<?>... providersForRegistration) {
 
-		for (final Class<PROVIDER> providerForRegistration : providersForRegistration) {
+		for (final Class<?> providerForRegistration : providersForRegistration) {
 			this.providerForRegistrationList.add(providerForRegistration);
 		}
 		return this;

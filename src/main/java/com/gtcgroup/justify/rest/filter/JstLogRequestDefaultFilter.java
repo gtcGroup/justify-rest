@@ -42,8 +42,8 @@ import com.gtcgroup.justify.core.test.helper.internal.LogTestConsoleUtilHelper;
  * <a href="http://gtcGroup.com">gtcGroup.com </a>.
  * </p>
  *
- * @author
- * @since v8.5.0
+ * @author Marvin Toll
+ * @since 8.5.0
  */
 @Provider
 public class JstLogRequestDefaultFilter implements ClientRequestFilter {

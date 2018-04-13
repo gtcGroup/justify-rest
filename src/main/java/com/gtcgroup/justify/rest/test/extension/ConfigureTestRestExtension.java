@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
 import com.gtcgroup.justify.core.test.extension.JstBaseExtension;
-import com.gtcgroup.justify.rest.test.helper.JstRestCacheHelper;
+import com.gtcgroup.justify.rest.test.helper.JstRestUtilHelper;
 
 public class ConfigureTestRestExtension extends JstBaseExtension implements BeforeAllCallback, AfterAllCallback {
 
@@ -27,7 +27,7 @@ public class ConfigureTestRestExtension extends JstBaseExtension implements Befo
 
 			final JstConfigureTestRestPO configureTestRestInstancePO = configureTestRestClassPO.newInstance();
 
-			this.testContainer = JstRestCacheHelper.initializeTestContainer(configureTestRestInstancePO);
+			this.testContainer = JstRestUtilHelper.initializeTestContainer(configureTestRestInstancePO);
 
 		} catch (final RuntimeException runtimeException) {
 			handleBeforeAllException(extensionContext, runtimeException); // Tested

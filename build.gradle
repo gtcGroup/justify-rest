@@ -56,27 +56,15 @@ repositories {
 dependencies {
 
     //compile project(':justify-core')
-    compile 'com.gtcgroup:justify-core:8.5.0-alpha' 
-    
-    testCompile 'org.glassfish.jersey.inject:jersey-hk2:2.26'
-    testCompile 'org.glassfish.jersey.media:jersey-media-json-jackson:latest.release'
+    compile 'com.gtcgroup:justify-core:8.5.+' 
+    compile 'org.glassfish.jersey.inject:jersey-hk2:2.+'
+    compile 'org.glassfish.jersey.media:jersey-media-json-jackson:2.+'
 
-    testCompile ('org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-grizzly2:2.26')  {
-        exclude group: 'junit', module: 'junit'
-    }
-    
-    testCompile("org.junit.jupiter:junit-jupiter-api:5.1.0") {
-        exclude group: 'junit', module: 'junit'
-    }
-   
-    testCompile("org.junit.platform:junit-platform-launcher:1.1.0") {
-        exclude group: 'junit', module: 'junit'
-    }
-    testCompile("org.junit.jupiter:junit-jupiter-engine:5.1.0") {
+    compile ('org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-grizzly2:2.+')  {
         exclude group: 'junit', module: 'junit'
     }
 } 
-/* 
+ 
 test {
     useJUnitPlatform {
         excludeTags 'intentional'
@@ -85,7 +73,7 @@ test {
 
     failFast = false
 }
-*/ 
+ 
     
 if (JavaVersion.current().isJava8Compatible()) {
     allprojects {
@@ -111,7 +99,7 @@ signing {
 
 group = "com.gtcgroup"
 archivesBaseName = "justify-rest"
-version = "8.5.0-alpha"
+version = "8.5.0-alpha2"
 
 task writeTestPOM << {
     pom {

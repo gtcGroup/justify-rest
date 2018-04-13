@@ -38,7 +38,7 @@ import org.glassfish.jersey.test.grizzly.GrizzlyTestContainerFactory;
  * </p>
  *
  * @author Marvin Toll
- * @since v.8.5
+ * @since 8.5
  */
 public abstract class JstConfigureTestRestPO {
 

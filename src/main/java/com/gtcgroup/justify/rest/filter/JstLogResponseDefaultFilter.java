@@ -45,8 +45,8 @@ import com.gtcgroup.justify.rest.test.assertion.JstAssertRestPO;
  * <a href="http://gtcGroup.com">gtcGroup.com </a>.
  * </p>
  *
- * @author
- * @since v8.5.0
+ * @author Marvin Toll
+ * @since 8.5.0
  */
 @Provider
 public class JstLogResponseDefaultFilter implements ClientResponseFilter {

@@ -24,19 +24,17 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.gtcgroup.justify.rest.test.ic.dependency;
+package com.gtcgroup.justify.rest.test.ic.dependency.get;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.GenericEntity;
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
-import com.gtcgroup.justify.rest.test.JstBaseIC;
+import com.gtcgroup.justify.core.base.JstBaseIC;
 import com.gtcgroup.justify.rest.test.extension.dependency.HelloTO;
 
 /**
@@ -48,54 +46,33 @@ import com.gtcgroup.justify.rest.test.extension.dependency.HelloTO;
  * </p>
  *
  * @author Marvin Toll
- * @since v.8.5
+ * @since 8.5
  */
+@Path("/query")
 @SuppressWarnings("static-method")
-@Path("/hello")
-public class HelloIC extends JstBaseIC {
+public class QueryParamIC extends JstBaseIC {
 
-	public static List<HelloTO> helloList = new ArrayList<>();
+	@GET
+	@Path("/param1")
+	public Response getData(@QueryParam("from") final int from, @QueryParam("to") final Integer to,
+			@QueryParam("detailList") final List<String> detailList) {
 
-	static {
 		final HelloTO helloTO = new HelloTO();
-		helloTO.setText("The Same");
+		helloTO.setText("method: getData(), from : " + from + ", to : " + to + ", detailList" + detailList.toString());
 
-		helloList.add(helloTO);
-		helloList.add(helloTO);
+		return Response.status(200).entity(helloTO).build();
 	}
 
-	// This method is called if APPLICATION_JSON is request
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getItems() {
+	@Path("/param2")
+	public Response getDefaults(@DefaultValue("1000") @QueryParam("from") final int from,
+			@DefaultValue("999") @QueryParam("to") final Integer to,
+			@DefaultValue("Single Default Entry") @QueryParam("detailList") final List<String> detailList) {
 
-		final GenericEntity<List<HelloTO>> genericEntity = new GenericEntity<List<HelloTO>>(helloList) {
-			// Empty Block
-		};
+		final HelloTO helloTO = new HelloTO();
+		helloTO.setText(
+				"method: getDefaults(), from : " + from + ", to : " + to + ", detailList" + detailList.toString());
 
-		return Response.ok(genericEntity).type(MediaType.APPLICATION_JSON).build();
+		return Response.ok(helloTO).build();
 	}
-
-	// This method is called if HTML is request
-	@GET
-	@Produces(MediaType.TEXT_HTML)
-	public String sayHtmlHello() {
-		return "<html>" + "<title>" + "Hello Jersey" + "</title>" + "<body><h1>" + "Hello Jersey" + "</h1></body>"
-				+ "</html>";
-	}
-
-	// This method is called if TEXT_PLAIN is request
-	@GET
-	@Produces(MediaType.TEXT_PLAIN)
-	public String sayPlainTextHello() {
-		return "Hello Jersey";
-	}
-
-	// This method is called if XML is request
-	@GET
-	@Produces(MediaType.TEXT_XML)
-	public String sayXMLHello() {
-		return "<?xml version=\"1.0\"?>" + "<hello>Hello Jersey" + "</hello>";
-	}
-
 }

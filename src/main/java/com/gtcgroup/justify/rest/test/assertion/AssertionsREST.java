@@ -150,7 +150,7 @@ public enum AssertionsREST {
 	// OBJECT values = null;
 	// try {
 	// values =
-	// JstRestCacheHelper.retrieveJerseyTest().target().path(assertRestPO.getRequestPath()).request()
+	// JstRestUtilHelper.retrieveJerseyTest().target().path(assertRestPO.getRequestPath()).request()
 	// .post(returnType);
 	//
 	// target("customers").request().post(Entity.entity(joe,

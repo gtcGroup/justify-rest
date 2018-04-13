@@ -37,7 +37,7 @@ import org.glassfish.jersey.test.spi.TestContainerFactory;
 import com.gtcgroup.justify.rest.test.extension.JstConfigureTestRestPO;
 
 /**
- * This Helper class caches {@link EntityManagerFactory}(s).
+ * This Helper class starts the {@link TestContainer}.
  *
  * <p style="font-family:Verdana; font-size:10px; font-style:italic">
  * Copyright (c) 2006 - 2018 by Global Technology Consulting Group, Inc. at
@@ -47,7 +47,7 @@ import com.gtcgroup.justify.rest.test.extension.JstConfigureTestRestPO;
  * @author Marvin Toll
  * @since v3.0
  */
-public enum JstRestCacheHelper {
+public enum JstRestUtilHelper {
 
 	/** Instance */
 	INSTANCE;

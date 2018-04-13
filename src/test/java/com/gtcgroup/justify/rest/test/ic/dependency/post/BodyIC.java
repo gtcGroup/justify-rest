@@ -24,12 +24,14 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.gtcgroup.justify.rest.test.ic.dependency;
+package com.gtcgroup.justify.rest.test.ic.dependency.post;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
-import com.gtcgroup.justify.rest.test.JstBaseIC;
+import com.gtcgroup.justify.core.base.JstBaseIC;
 
 /**
  * An I/O Controller class used for testing.
@@ -40,21 +42,15 @@ import com.gtcgroup.justify.rest.test.JstBaseIC;
  * </p>
  *
  * @author Marvin Toll
- * @since v.8.5
+ * @since 8.5
  */
-@Path("")
-public class ValuesIC extends JstBaseIC {
+@Path("body")
+public class BodyIC extends JstBaseIC {
 
-	public static final String DEFAULT_VALUES = "value1, value2";
-	private final String values;
-
-	public ValuesIC() {
-		this.values = DEFAULT_VALUES;
-	}
-
+	@SuppressWarnings("static-method")
 	@GET
-	@Path("/values")
-	public String get() {
-		return this.values;
+	@Produces(MediaType.TEXT_PLAIN)
+	public String get(final String hello) {
+		return hello;
 	}
 }

@@ -28,6 +28,7 @@ package com.gtcgroup.justify.rest.test.intentional.error;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import com.gtcgroup.justify.core.test.extension.JstConfigureTestLogToConsole;
@@ -35,9 +36,10 @@ import com.gtcgroup.justify.rest.test.extension.JstConfigureTestREST;
 import com.gtcgroup.justify.rest.test.extension.dependency.ConcreteExceptionTestRestPO;
 
 @SuppressWarnings("static-method")
+@Tag(value = "intentional")
 @JstConfigureTestLogToConsole()
 @JstConfigureTestREST(configureTestRestPO = ConcreteExceptionTestRestPO.class)
-public class Intentional1AssertinoErrorTest {
+public class Intentional1AssertionErrorTest {
 
 	@Test
 	public void configureException() {

@@ -38,7 +38,7 @@ import com.gtcgroup.justify.rest.test.extension.JstConfigureTestRestPO;
  * </p>
  *
  * @author Marvin Toll
- * @since v.8.5
+ * @since 8.5
  */
 public class ConcreteExceptionTestRestPO extends JstConfigureTestRestPO {
 

@@ -26,7 +26,7 @@
 
 package com.gtcgroup.justify.rest.test;
 
-import com.gtcgroup.justify.core.base.JstBaseSuffix;
+import com.gtcgroup.justify.core.JstPatternEnabledDevelopmentSuffix;
 
 /**
  * This Transfer Object base class supports readability.
@@ -39,7 +39,7 @@ import com.gtcgroup.justify.core.base.JstBaseSuffix;
  * @author Marvin Toll
  * @since v3.0
  */
-public abstract class JstBaseTO extends JstBaseSuffix {
+public abstract class JstBaseTO extends JstPatternEnabledDevelopmentSuffix {
 
 	@Override
 	protected String assignPatternSuffixTM() {

@@ -24,7 +24,7 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.gtcgroup.justify.rest.test.ic.dependency;
+package com.gtcgroup.justify.rest.test.ic.dependency.get;
 
 import java.util.List;
 
@@ -35,7 +35,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import com.gtcgroup.justify.rest.test.JstBaseIC;
+import com.gtcgroup.justify.core.base.JstBaseIC;
 
 /**
  * An I/O Controller class used for testing.
@@ -46,7 +46,7 @@ import com.gtcgroup.justify.rest.test.JstBaseIC;
  * </p>
  *
  * @author Marvin Toll
- * @since v.8.5
+ * @since 8.5
  */
 @Path("/query")
 @SuppressWarnings("static-method")

@@ -24,14 +24,15 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.gtcgroup.justify.rest.test.extension.dependency;
+package com.gtcgroup.justify.rest.test.ic.dependency.get;
 
-import java.io.Serializable;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
 
-import com.gtcgroup.justify.rest.test.JstBaseTO;
+import com.gtcgroup.justify.core.base.JstBaseIC;
 
 /**
- * A Transfer Object used for testing.
+ * An I/O Controller class used for testing.
  *
  * <p style="font-family:Verdana; font-size:10px; font-style:italic">
  * Copyright (c) 2006 - 2018 by Global Technology Consulting Group, Inc. at
@@ -41,18 +42,19 @@ import com.gtcgroup.justify.rest.test.JstBaseTO;
  * @author Marvin Toll
  * @since 8.5
  */
-public class HelloTO extends JstBaseTO implements Serializable {
+@Path("")
+public class ValuesIC extends JstBaseIC {
 
-	private static final long serialVersionUID = 1L;
+	public static final String DEFAULT_VALUES = "value1, value2";
+	private final String values;
 
-	private String text;
-
-	public String getText() {
-		return this.text;
+	public ValuesIC() {
+		this.values = DEFAULT_VALUES;
 	}
 
-	public void setText(final String text) {
-		this.text = text;
+	@GET
+	@Path("/values")
+	public String get() {
+		return this.values;
 	}
-
 }
