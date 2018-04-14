@@ -24,16 +24,16 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.gtcgroup.justify.rest.test.ic.dependency.get;
+package com.gtcgroup.justify.rest.test.ic.dependency.put;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.ws.rs.GET;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.GenericEntity;
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 import com.gtcgroup.justify.core.base.JstBaseIC;
@@ -50,48 +50,19 @@ import com.gtcgroup.justify.rest.test.to.dependency.HelloTO;
  * @author Marvin Toll
  * @since 8.5
  */
+@Path("/path/query/entity")
 @SuppressWarnings("static-method")
-@Path("/hello")
-public class HelloIC extends JstBaseIC {
+public class PathParamAndQueryParamAndEntityIC extends JstBaseIC {
 
-	public static List<HelloTO> helloList = new ArrayList<>();
+	@PUT
+	@Path("/{from}")
+	@Consumes()
+	@Produces
+	public Response getData(final HelloTO hello, @PathParam("from") final int from,
+			@QueryParam("detailList") final List<String> detailList) {
 
-	static {
-		final HelloTO helloTO = new HelloTO();
-		helloTO.setText("The Same");
+		hello.setText("from [" + from + "] detailList [" + detailList.toString() + "]");
 
-		helloList.add(helloTO);
-		helloList.add(helloTO);
+		return Response.ok(hello).build();
 	}
-
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getItems() {
-
-		final GenericEntity<List<HelloTO>> genericEntity = new GenericEntity<List<HelloTO>>(helloList) {
-			// Empty Block
-		};
-
-		return Response.ok(genericEntity).type(MediaType.APPLICATION_JSON).build();
-	}
-
-	@GET
-	@Produces(MediaType.TEXT_HTML)
-	public String sayHtmlHello() {
-		return "<html>" + "<title>" + "Hello Jersey" + "</title>" + "<body><h1>" + "Hello Jersey" + "</h1></body>"
-				+ "</html>";
-	}
-
-	@GET
-	@Produces(MediaType.TEXT_PLAIN)
-	public String sayPlainTextHello() {
-		return "Hello Jersey";
-	}
-
-	@GET
-	@Produces(MediaType.TEXT_XML)
-	public String sayXMLHello() {
-		return "<?xml version=\"1.0\"?>" + "<hello>Hello Jersey" + "</hello>";
-	}
-
 }

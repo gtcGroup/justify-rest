@@ -28,10 +28,8 @@ package com.gtcgroup.justify.rest.test.extension.dependency;
 import org.glassfish.jersey.server.ResourceConfig;
 
 import com.gtcgroup.justify.rest.test.extension.JstConfigureTestRestPO;
-import com.gtcgroup.justify.rest.test.ic.dependency.post.BodyIC;
-import com.gtcgroup.justify.rest.test.ic.dependency.post.HelloIC;
-import com.gtcgroup.justify.rest.test.ic.dependency.post.PathAndQueryParamIC;
-import com.gtcgroup.justify.rest.test.ic.dependency.post.QueryParamAndEntityIC;
+import com.gtcgroup.justify.rest.test.ic.dependency.put.NoResponseIC;
+import com.gtcgroup.justify.rest.test.ic.dependency.put.PathParamAndQueryParamAndEntityIC;
 
 /**
  * This Parameter Object class supports configuration.
@@ -44,11 +42,11 @@ import com.gtcgroup.justify.rest.test.ic.dependency.post.QueryParamAndEntityIC;
  * @author Marvin Toll
  * @since 8.5
  */
-public class ConfigurePostTestRestPO extends JstConfigureTestRestPO {
+public class ConfigurePutTestRestPO extends JstConfigureTestRestPO {
 
 	@Override
 	protected ResourceConfig instantiateResourceConfigTM() {
 
-		return new ResourceConfig(BodyIC.class, QueryParamAndEntityIC.class, HelloIC.class, PathAndQueryParamIC.class);
+		return new ResourceConfig(PathParamAndQueryParamAndEntityIC.class, NoResponseIC.class);
 	}
 }

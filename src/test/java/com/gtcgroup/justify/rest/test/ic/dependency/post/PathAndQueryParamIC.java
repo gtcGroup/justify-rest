@@ -24,20 +24,17 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.gtcgroup.justify.rest.test.ic.dependency.get;
+package com.gtcgroup.justify.rest.test.ic.dependency.post;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.GenericEntity;
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 import com.gtcgroup.justify.core.base.JstBaseIC;
-import com.gtcgroup.justify.rest.test.to.dependency.HelloTO;
 
 /**
  * An I/O Controller class used for testing.
@@ -50,48 +47,18 @@ import com.gtcgroup.justify.rest.test.to.dependency.HelloTO;
  * @author Marvin Toll
  * @since 8.5
  */
+@Path("/path")
 @SuppressWarnings("static-method")
-@Path("/hello")
-public class HelloIC extends JstBaseIC {
+public class PathAndQueryParamIC extends JstBaseIC {
 
-	public static List<HelloTO> helloList = new ArrayList<>();
+	@POST
+	@Path("/param/{from}/{to}")
+	public Response getData(@PathParam("from") final int from, @PathParam("to") final int to,
+			@QueryParam("detailList") final List<String> detailList) {
 
-	static {
-		final HelloTO helloTO = new HelloTO();
-		helloTO.setText("The Same");
+		return Response.status(200)
+				.entity("getUsers is called, from : " + from + ", to : " + to + ", detailList" + detailList.toString())
+				.build();
 
-		helloList.add(helloTO);
-		helloList.add(helloTO);
 	}
-
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getItems() {
-
-		final GenericEntity<List<HelloTO>> genericEntity = new GenericEntity<List<HelloTO>>(helloList) {
-			// Empty Block
-		};
-
-		return Response.ok(genericEntity).type(MediaType.APPLICATION_JSON).build();
-	}
-
-	@GET
-	@Produces(MediaType.TEXT_HTML)
-	public String sayHtmlHello() {
-		return "<html>" + "<title>" + "Hello Jersey" + "</title>" + "<body><h1>" + "Hello Jersey" + "</h1></body>"
-				+ "</html>";
-	}
-
-	@GET
-	@Produces(MediaType.TEXT_PLAIN)
-	public String sayPlainTextHello() {
-		return "Hello Jersey";
-	}
-
-	@GET
-	@Produces(MediaType.TEXT_XML)
-	public String sayXMLHello() {
-		return "<?xml version=\"1.0\"?>" + "<hello>Hello Jersey" + "</hello>";
-	}
-
 }

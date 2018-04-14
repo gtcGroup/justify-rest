@@ -27,63 +27,26 @@
 package com.gtcgroup.justify.rest.test.extension;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 
-import org.glassfish.jersey.client.ClientConfig;
 import org.junit.jupiter.api.Test;
 
 import com.gtcgroup.justify.core.test.extension.JstConfigureTestLogToConsole;
-import com.gtcgroup.justify.rest.filter.JstLogRequestDefaultFilter;
-import com.gtcgroup.justify.rest.filter.JstLogResponseDefaultFilter;
 import com.gtcgroup.justify.rest.test.assertion.AssertionsREST;
 import com.gtcgroup.justify.rest.test.assertion.JstAssertRestPO;
 import com.gtcgroup.justify.rest.test.extension.dependency.ConfigurePostTestRestPO;
-import com.gtcgroup.justify.rest.test.ic.dependency.get.ValuesIC;
+import com.gtcgroup.justify.rest.test.to.dependency.HelloTO;
 import com.sun.research.ws.wadl.HTTPMethods;
 
 @SuppressWarnings("static-method")
 @JstConfigureTestLogToConsole()
 @JstConfigureTestREST(configureTestRestPO = ConfigurePostTestRestPO.class)
 public class JstConfigureTestRestPostTest {
-
-	@Test
-	public void testHelloIC_mediaTypes() {
-
-		assertAll(() -> {
-
-			assertTrue(AssertionsREST.assertSingle(String.class,
-					JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString())
-							.withAcceptedResponseMediaTypes(MediaType.TEXT_HTML).withPath("hello")
-							.withLogResponseFilter())
-					.contains("<h1>Hello Jersey</h1>"));
-
-			assertTrue(AssertionsREST.assertSingle(String.class,
-					JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString())
-							.withAcceptedResponseMediaTypes(MediaType.TEXT_PLAIN).withPath("hello")
-							.withLogRequestFilter())
-					.contains("Hello Jersey"));
-
-			assertTrue(AssertionsREST
-					.assertSingle(String.class,
-							JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString())
-									.withAcceptedResponseMediaTypes(MediaType.TEXT_XML).withPath("hello")
-									.withLogRequestFilter().withLogResponseFilter())
-					.contains("<hello>Hello Jersey</hello>"));
-
-			assertFalse(AssertionsREST.assertList(JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString())
-					.withPath("hello").withLogResponseFilter()).isEmpty());
-		});
-	}
 
 	@Test
 	public void testPOST_happyPath() {
@@ -95,54 +58,61 @@ public class JstConfigureTestRestPostTest {
 	}
 
 	@Test
-	public void testPOST_returnTypeException() {
-
-		AssertionsREST.assertSingle(Long.class, JstAssertRestPO.withHttpMethod(HTTPMethods.POST.toString())
-				.withPath("fake").withValidHttpStatusCodes(HttpServletResponse.SC_NOT_FOUND));
-	}
-
-	@SuppressWarnings("boxing")
-	@Test
-	public void testQueryParamsIC() {
-
-		final List<String> detailList = new ArrayList<>();
-		detailList.add("List Entry One");
-		detailList.add("List Entry Two");
-
-		final Map<String, Object> queryParamMap = new HashMap<>();
-		queryParamMap.put("from", 1);
-		queryParamMap.put("to", new Integer(2));
-		queryParamMap.put("detailList", detailList);
+	public void testPOST_mediaTypes() {
 
 		assertAll(() -> {
-			assertTrue(AssertionsREST
-					.assertSingle(String.class,
-							JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString()).withPath("query/param1")
-									.withLogRequestFilter().withLogResponseFilter().withQueryParamMap(queryParamMap))
-					.contains("detailList"));
 
 			assertTrue(AssertionsREST.assertSingle(String.class,
-					JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString()).withPath("query/param1")
-							.withLogRequestFilter().withLogResponseFilter().withQueryParam("from", "1")
-							.withQueryParam("to", "2").withQueryParam("detailList", "List Entry One, List Entry Two")
-							.withMaxEntityLoggingSize(15).withTargetURI("http://localhost:9998/"))
-					.contains("detailList"));
+					JstAssertRestPO.withHttpMethod(HTTPMethods.POST.toString())
+							.withAcceptedResponseMediaTypes(MediaType.TEXT_HTML).withPath("hello")
+							.withLogResponseFilter())
+					.contains("<h1>Hello Jersey</h1>"));
 
-			AssertionsREST.assertSingle(String.class,
-					JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString()).withPath("query/param2")
-							.withLogRequestFilter(JstLogRequestDefaultFilter.class)
-							.withLogResponseFilter(JstLogResponseDefaultFilter.class));
+			assertTrue(AssertionsREST.assertSingle(String.class,
+					JstAssertRestPO.withHttpMethod(HTTPMethods.POST.toString())
+							.withAcceptedResponseMediaTypes(MediaType.TEXT_PLAIN).withPath("hello")
+							.withLogRequestFilter())
+					.contains("Hello Jersey"));
+
+			assertTrue(AssertionsREST
+					.assertSingle(String.class,
+							JstAssertRestPO.withHttpMethod(HTTPMethods.POST.toString())
+									.withAcceptedResponseMediaTypes(MediaType.TEXT_XML).withPath("hello")
+									.withLogRequestFilter().withLogResponseFilter())
+					.contains("<hello>Hello Jersey</hello>"));
+
+			assertNull(AssertionsREST.assertList(JstAssertRestPO.withHttpMethod(HTTPMethods.POST.toString())
+					.withPath("hello").withLogResponseFilter()));
 		});
 	}
 
 	@Test
-	public void testValuesIC() {
+	public void testPOST_pathAndQueryParam() {
 
-		assertTrue(
-				AssertionsREST
-						.assertSingle(String.class, JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString())
-								.withPath("values").withClientConfig(new ClientConfig()))
-						.contains(ValuesIC.DEFAULT_VALUES));
+		assertTrue(AssertionsREST.assertSingle(String.class,
+				JstAssertRestPO.withHttpMethod(HTTPMethods.POST.toString()).withPath("path/param/1/2")
+						.withEntity(Entity.entity(new HelloTO(), MediaType.APPLICATION_JSON)).withLogRequestFilter()
+						.withLogResponseFilter().withQueryParam("detailList", "List Entry One, List Entry Two")
+						.withTargetURI("http://localhost:9998/"))
+				.contains("detailList"));
+	}
 
+	@Test
+	public void testPOST_queryParamAndEntity() {
+
+		assertTrue(AssertionsREST.assertSingle(String.class,
+				JstAssertRestPO.withHttpMethod(HTTPMethods.POST.toString()).withPath("query/param")
+						.withEntity(Entity.entity(new HelloTO(), MediaType.APPLICATION_JSON)).withLogRequestFilter()
+						.withLogResponseFilter().withQueryParam("from", "1").withQueryParam("to", "2")
+						.withQueryParam("detailList", "List Entry One, List Entry Two").withMaxEntityLoggingSize(15)
+						.withTargetURI("http://localhost:9998/"))
+				.contains("detailList"));
+	}
+
+	@Test
+	public void testPOST_returnTypeException() {
+
+		AssertionsREST.assertSingle(Long.class, JstAssertRestPO.withHttpMethod(HTTPMethods.POST.toString())
+				.withPath("fake").withValidHttpStatusCodes(HttpServletResponse.SC_NOT_FOUND));
 	}
 }

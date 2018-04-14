@@ -24,18 +24,19 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.gtcgroup.justify.rest.test.ic.dependency.get;
+package com.gtcgroup.justify.rest.test.ic.dependency.put;
 
 import java.util.List;
 
-import javax.ws.rs.GET;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 
 import com.gtcgroup.justify.core.base.JstBaseIC;
+import com.gtcgroup.justify.rest.test.to.dependency.HelloTO;
 
 /**
  * An I/O Controller class used for testing.
@@ -48,33 +49,19 @@ import com.gtcgroup.justify.core.base.JstBaseIC;
  * @author Marvin Toll
  * @since 8.5
  */
-@Path("/query")
+@Path("/no/response")
 @SuppressWarnings("static-method")
-public class PathParamIC extends JstBaseIC {
+public class NoResponseIC extends JstBaseIC {
 
-	@GET
-	@Path("/param1")
-	public Response getData(@QueryParam("from") final int from, @QueryParam("to") final int to,
+	@PUT
+	@Path("/{from}")
+	@Consumes()
+	@Produces
+	public void getData(final HelloTO hello, @PathParam("from") final int from,
 			@QueryParam("detailList") final List<String> detailList) {
 
-		return Response.status(200)
-				.entity("getUsers is called, from : " + from + ", to : " + to + ", detailList" + detailList.toString())
-				.build();
+		hello.setText("from [" + from + "] detailList [" + detailList.toString() + "]");
 
+		return;
 	}
-
-	@GET
-	@Path("/param2")
-	public Response getData(@Context final UriInfo info) {
-
-		final String from = info.getQueryParameters().getFirst("from");
-		final String to = info.getQueryParameters().getFirst("to");
-		final List<String> detailList = info.getQueryParameters().get("detailList");
-
-		return Response.status(200)
-				.entity("getUsers is called, from : " + from + ", to : " + to + ", detailList" + detailList.toString())
-				.build();
-
-	}
-
 }

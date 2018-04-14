@@ -58,6 +58,14 @@ public enum AssertionsREST {
 
 	INSTANCE;
 
+	/**
+	 * This method supports status code processing for {@link Exception}s. A
+	 * {@link Boolean} value is returned if a {@link WebApplicationException} is
+	 * thrown indicating a valid status code was returned as defined in the
+	 * {@link JstAssertRestPO}.
+	 *
+	 * @return {@link List} or null if the I/O Controller returns no response.
+	 */
 	public static List<?> assertList(final JstAssertRestPO assertRestPO) {
 
 		try {
@@ -74,10 +82,10 @@ public enum AssertionsREST {
 	/**
 	 * This method supports status code processing for {@link Exception}s. A
 	 * {@link Boolean} value is returned if a {@link WebApplicationException} is
-	 * thrown indicating a valid status code as defined in the
+	 * thrown indicating a valid status code was returned as defined in the
 	 * {@link JstAssertRestPO}.
 	 *
-	 * @return {@link Object}
+	 * @return {@link Object} or null if the I/O Controller returns no response.
 	 */
 	@SuppressWarnings("unchecked")
 	public static <OBJECT> OBJECT assertSingle(final Class<OBJECT> responseClass, final JstAssertRestPO assertRestPO) {
@@ -95,6 +103,10 @@ public enum AssertionsREST {
 			}
 
 			throwAssertFailedWithMessage(assertRestPO.getHttpMethod().toString(), assertRestPO, e.getMessage());
+		}
+
+		if (null != responseInstance && responseInstance.equals("")) {
+			return null;
 		}
 
 		return responseInstance;
@@ -185,25 +197,6 @@ public enum AssertionsREST {
 		}
 		return false;
 	}
-
-	// public static <OBJECT> OBJECT assertPOST(final Class<OBJECT> returnType,
-	// final JstAssertRestPO assertRestPO) {
-	//
-	// OBJECT values = null;
-	// try {
-	// values =
-	// JstRestUtilHelper.retrieveJerseyTest().target().path(assertRestPO.getRequestPath()).request()
-	// .post(returnType);
-	//
-	// target("customers").request().post(Entity.entity(joe,
-	// MediaType.APPLICATION_JSON), String.class);
-	//
-	// assertEquals(ValuesIC.DEFAULT_VALUES, values);
-	// } catch (final Exception e) {
-	// throwAssertFailedWithMessage(HTTPMethods.GET.toString(), e.getMessage());
-	// }
-	// return values;
-	// }
 
 	private static void throwAssertFailedWithMessage(final String methodType, final JstAssertRestPO assertRestPO,
 			final String message) {

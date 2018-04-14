@@ -24,20 +24,14 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.gtcgroup.justify.rest.test.ic.dependency.get;
+package com.gtcgroup.justify.rest.test.ic.dependency.post;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import com.gtcgroup.justify.core.base.JstBaseIC;
-import com.gtcgroup.justify.rest.test.to.dependency.HelloTO;
 
 /**
  * An I/O Controller class used for testing.
@@ -54,41 +48,27 @@ import com.gtcgroup.justify.rest.test.to.dependency.HelloTO;
 @Path("/hello")
 public class HelloIC extends JstBaseIC {
 
-	public static List<HelloTO> helloList = new ArrayList<>();
-
-	static {
-		final HelloTO helloTO = new HelloTO();
-		helloTO.setText("The Same");
-
-		helloList.add(helloTO);
-		helloList.add(helloTO);
-	}
-
-	@GET
+	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getItems() {
+	public void getItems() {
 
-		final GenericEntity<List<HelloTO>> genericEntity = new GenericEntity<List<HelloTO>>(helloList) {
-			// Empty Block
-		};
-
-		return Response.ok(genericEntity).type(MediaType.APPLICATION_JSON).build();
+		return;
 	}
 
-	@GET
+	@POST
 	@Produces(MediaType.TEXT_HTML)
 	public String sayHtmlHello() {
 		return "<html>" + "<title>" + "Hello Jersey" + "</title>" + "<body><h1>" + "Hello Jersey" + "</h1></body>"
 				+ "</html>";
 	}
 
-	@GET
+	@POST
 	@Produces(MediaType.TEXT_PLAIN)
 	public String sayPlainTextHello() {
 		return "Hello Jersey";
 	}
 
-	@GET
+	@POST
 	@Produces(MediaType.TEXT_XML)
 	public String sayXMLHello() {
 		return "<?xml version=\"1.0\"?>" + "<hello>Hello Jersey" + "</hello>";

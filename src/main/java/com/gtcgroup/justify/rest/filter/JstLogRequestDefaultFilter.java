@@ -59,7 +59,7 @@ public class JstLogRequestDefaultFilter implements ClientRequestFilter {
 		message.append("\nHTTP REQUEST");
 		message.append("\n\tMethod: ").append(requestContext.getMethod());
 		message.append("\n\tHeader: ").append(requestContext.getHeaders());
-		message.append("\n\tURI:    ").append(requestContext.getUri());
+		message.append("\n\tPath:    ").append(requestContext.getUri().getPath());
 		message.append("\n");
 
 		return message.toString();

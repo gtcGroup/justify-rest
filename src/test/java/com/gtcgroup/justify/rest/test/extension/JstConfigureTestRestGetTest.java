@@ -70,25 +70,7 @@ public class JstConfigureTestRestGetTest {
 	}
 
 	@Test
-	public void testGET_requestBaseUriException() {
-
-		Assertions.assertThrows(AssertionFailedError.class, () -> {
-			AssertionsREST.assertSingle(String.class,
-					JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString()).withPath("fake"));
-		});
-	}
-
-	@Test
-	public void testGET_returnTypeException() {
-
-		Assertions.assertThrows(AssertionFailedError.class, () -> {
-			AssertionsREST.assertSingle(Long.class,
-					JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString()).withPath("values"));
-		});
-	}
-
-	@Test
-	public void testHelloIC_mediaTypes() {
+	public void testGET_mediaTypes() {
 
 		assertAll(() -> {
 
@@ -118,7 +100,7 @@ public class JstConfigureTestRestGetTest {
 
 	@SuppressWarnings("boxing")
 	@Test
-	public void testQueryParamsIC() {
+	public void testGET_queryParamsIC() {
 
 		final List<String> detailList = new ArrayList<>();
 		detailList.add("List Entry One");
@@ -151,7 +133,25 @@ public class JstConfigureTestRestGetTest {
 	}
 
 	@Test
-	public void testValuesIC() {
+	public void testGET_requestBaseUriException() {
+
+		Assertions.assertThrows(AssertionFailedError.class, () -> {
+			AssertionsREST.assertSingle(String.class,
+					JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString()).withPath("fake"));
+		});
+	}
+
+	@Test
+	public void testGET_returnTypeException() {
+
+		Assertions.assertThrows(AssertionFailedError.class, () -> {
+			AssertionsREST.assertSingle(Long.class,
+					JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString()).withPath("values"));
+		});
+	}
+
+	@Test
+	public void testGET_values() {
 
 		assertTrue(
 				AssertionsREST
