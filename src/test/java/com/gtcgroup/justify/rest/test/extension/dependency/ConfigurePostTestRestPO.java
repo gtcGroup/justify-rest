@@ -28,6 +28,7 @@ package com.gtcgroup.justify.rest.test.extension.dependency;
 import org.glassfish.jersey.server.ResourceConfig;
 
 import com.gtcgroup.justify.rest.test.extension.JstConfigureTestRestPO;
+import com.gtcgroup.justify.rest.test.ic.dependency.post.BodyIC;
 
 /**
  * This Parameter Object class supports configuration.
@@ -40,13 +41,11 @@ import com.gtcgroup.justify.rest.test.extension.JstConfigureTestRestPO;
  * @author Marvin Toll
  * @since 8.5
  */
-public class ConcreteExceptionTestRestPO extends JstConfigureTestRestPO {
+public class ConfigurePostTestRestPO extends JstConfigureTestRestPO {
 
 	@Override
 	protected ResourceConfig instantiateResourceConfigTM() {
 
-		throw new RuntimeException("Intentional Exception");
-
-		// return new ResourceConfig();
+		return new ResourceConfig(BodyIC.class);
 	}
 }

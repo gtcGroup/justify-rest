@@ -48,13 +48,13 @@ import com.gtcgroup.justify.rest.filter.JstLogRequestDefaultFilter;
 import com.gtcgroup.justify.rest.filter.JstLogResponseDefaultFilter;
 import com.gtcgroup.justify.rest.test.assertion.AssertionsREST;
 import com.gtcgroup.justify.rest.test.assertion.JstAssertRestPO;
-import com.gtcgroup.justify.rest.test.extension.dependency.ConcreteConfigureTestRestPO;
+import com.gtcgroup.justify.rest.test.extension.dependency.ConfigureGetTestRestPO;
 import com.gtcgroup.justify.rest.test.ic.dependency.get.ValuesIC;
 import com.sun.research.ws.wadl.HTTPMethods;
 
 @SuppressWarnings("static-method")
 @JstConfigureTestLogToConsole()
-@JstConfigureTestREST(configureTestRestPO = ConcreteConfigureTestRestPO.class)
+@JstConfigureTestREST(configureTestRestPO = ConfigureGetTestRestPO.class)
 public class JstConfigureTestRestGetTest {
 
 	@Test

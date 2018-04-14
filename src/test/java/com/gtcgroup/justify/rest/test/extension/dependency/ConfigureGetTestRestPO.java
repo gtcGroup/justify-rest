@@ -23,27 +23,31 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+package com.gtcgroup.justify.rest.test.extension.dependency;
 
-package com.gtcgroup.justify.rest.test.intentional.error;
+import org.glassfish.jersey.server.ResourceConfig;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import com.gtcgroup.justify.rest.test.extension.JstConfigureTestRestPO;
+import com.gtcgroup.justify.rest.test.ic.dependency.get.HelloIC;
+import com.gtcgroup.justify.rest.test.ic.dependency.get.QueryParamIC;
+import com.gtcgroup.justify.rest.test.ic.dependency.get.ValuesIC;
 
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+/**
+ * This Parameter Object class supports configuration.
+ *
+ * <p style="font-family:Verdana; font-size:10px; font-style:italic">
+ * Copyright (c) 2006 - 2018 by Global Technology Consulting Group, Inc. at
+ * <a href="http://gtcGroup.com">gtcGroup.com </a>.
+ * </p>
+ *
+ * @author Marvin Toll
+ * @since 8.5
+ */
+public class ConfigureGetTestRestPO extends JstConfigureTestRestPO {
 
-import com.gtcgroup.justify.core.test.extension.JstConfigureTestLogToConsole;
-import com.gtcgroup.justify.rest.test.extension.JstConfigureTestREST;
-import com.gtcgroup.justify.rest.test.extension.dependency.ConfigureExceptionTestRestPO;
+	@Override
+	protected ResourceConfig instantiateResourceConfigTM() {
 
-@SuppressWarnings("static-method")
-@Tag(value = "intentional")
-@JstConfigureTestLogToConsole()
-@JstConfigureTestREST(configureTestRestPO = ConfigureExceptionTestRestPO.class)
-public class Intentional1AssertionErrorTest {
-
-	@Test
-	public void configureException() {
-
-		assertTrue(true);
+		return new ResourceConfig(ValuesIC.class, HelloIC.class, QueryParamIC.class);
 	}
 }

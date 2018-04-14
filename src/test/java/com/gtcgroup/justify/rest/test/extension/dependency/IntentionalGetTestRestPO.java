@@ -28,8 +28,7 @@ package com.gtcgroup.justify.rest.test.extension.dependency;
 import org.glassfish.jersey.server.ResourceConfig;
 
 import com.gtcgroup.justify.rest.test.extension.JstConfigureTestRestPO;
-import com.gtcgroup.justify.rest.test.ic.dependency.get.HelloIC;
-import com.gtcgroup.justify.rest.test.ic.dependency.get.QueryParamIC;
+import com.gtcgroup.justify.rest.test.ic.dependency.get.BodyIC;
 import com.gtcgroup.justify.rest.test.ic.dependency.get.ValuesIC;
 
 /**
@@ -43,11 +42,11 @@ import com.gtcgroup.justify.rest.test.ic.dependency.get.ValuesIC;
  * @author Marvin Toll
  * @since 8.5
  */
-public class ConcreteConfigureTestRestPO extends JstConfigureTestRestPO {
+public class IntentionalGetTestRestPO extends JstConfigureTestRestPO {
 
 	@Override
 	protected ResourceConfig instantiateResourceConfigTM() {
 
-		return new ResourceConfig(ValuesIC.class, HelloIC.class, QueryParamIC.class);
+		return new ResourceConfig(BodyIC.class, ValuesIC.class);
 	}
 }

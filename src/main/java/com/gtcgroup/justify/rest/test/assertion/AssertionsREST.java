@@ -30,11 +30,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.client.ClientConfig;
 import org.opentest4j.AssertionFailedError;
@@ -69,6 +71,15 @@ public enum AssertionsREST {
 
 	}
 
+	/**
+	 * This method supports status code processing for {@link Exception}s. A
+	 * {@link Boolean} value is returned if a {@link WebApplicationException} is
+	 * thrown indicating a valid status code as defined in the
+	 * {@link JstAssertRestPO}.
+	 *
+	 * @return {@link Object}
+	 */
+	@SuppressWarnings("unchecked")
 	public static <OBJECT> OBJECT assertSingle(final Class<OBJECT> responseClass, final JstAssertRestPO assertRestPO) {
 
 		OBJECT responseInstance = null;
@@ -77,7 +88,13 @@ public enum AssertionsREST {
 			responseInstance = buildResponseSingle(responseClass, assertRestPO);
 
 		} catch (final Exception e) {
-			throwAssertFailedWithMessage(HTTPMethods.GET.toString(), assertRestPO, e.getMessage());
+
+			if (isWebApplicationException(assertRestPO, e)) {
+
+				return (OBJECT) Boolean.TRUE;
+			}
+
+			throwAssertFailedWithMessage(assertRestPO.getHttpMethod().toString(), assertRestPO, e.getMessage());
 		}
 
 		return responseInstance;
@@ -142,6 +159,31 @@ public enum AssertionsREST {
 		}
 
 		return webTarget.request(assertRestPO.getAcceptedResponseMediaTypes());
+	}
+
+	private static boolean isWebApplicationException(final JstAssertRestPO assertRestPO, final Exception e) {
+
+		if (e instanceof WebApplicationException) {
+
+			final WebApplicationException webApplicationException = (WebApplicationException) e;
+
+			// TODO: Take a look at this.
+			@SuppressWarnings("resource")
+			final Response response = webApplicationException.getResponse();
+
+			if (assertRestPO.containsValidHttpStatusCodes()) {
+
+				for (final int statusCode : assertRestPO.getValidHttpStatusCodes()) {
+
+					if (statusCode == response.getStatus()) {
+
+						response.close();
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	// public static <OBJECT> OBJECT assertPOST(final Class<OBJECT> returnType,

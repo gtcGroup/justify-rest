@@ -85,6 +85,8 @@ public class JstAssertRestPO extends JstBasePO {
 
 	private Entity<?> entity;
 
+	private int[] validHttpStatusCodes;
+
 	/**
 	 * Constructor
 	 */
@@ -215,6 +217,14 @@ public class JstAssertRestPO extends JstBasePO {
 		return this;
 	}
 
+	/**
+	 * @return {@link JstAssertRestPO}
+	 */
+	public JstAssertRestPO withValidHttpStatusCodes(final int... validHttpStatusCodes) {
+		this.validHttpStatusCodes = validHttpStatusCodes;
+		return this;
+	}
+
 	protected boolean containsEnity() {
 
 		if (null == this.entity) {
@@ -233,6 +243,10 @@ public class JstAssertRestPO extends JstBasePO {
 			return false;
 		}
 		return true;
+	}
+
+	protected boolean containsValidHttpStatusCodes() {
+		return null != this.validHttpStatusCodes;
 	}
 
 	protected String[] getAcceptedResponseMediaTypes() {
@@ -274,5 +288,9 @@ public class JstAssertRestPO extends JstBasePO {
 
 	protected String getTargetURI() {
 		return this.targetURI;
+	}
+
+	protected int[] getValidHttpStatusCodes() {
+		return this.validHttpStatusCodes;
 	}
 }

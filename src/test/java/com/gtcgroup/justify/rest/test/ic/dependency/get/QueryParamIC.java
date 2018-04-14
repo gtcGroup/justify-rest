@@ -35,7 +35,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 import com.gtcgroup.justify.core.base.JstBaseIC;
-import com.gtcgroup.justify.rest.test.extension.dependency.HelloTO;
+import com.gtcgroup.justify.rest.test.to.dependency.HelloTO;
 
 /**
  * An I/O Controller class used for testing.

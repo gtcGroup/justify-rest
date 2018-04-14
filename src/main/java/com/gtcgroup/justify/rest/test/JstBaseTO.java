@@ -26,6 +26,8 @@
 
 package com.gtcgroup.justify.rest.test;
 
+import java.io.Serializable;
+
 import com.gtcgroup.justify.core.JstPatternEnabledDevelopmentSuffix;
 
 /**
@@ -39,7 +41,9 @@ import com.gtcgroup.justify.core.JstPatternEnabledDevelopmentSuffix;
  * @author Marvin Toll
  * @since v3.0
  */
-public abstract class JstBaseTO extends JstPatternEnabledDevelopmentSuffix {
+public abstract class JstBaseTO extends JstPatternEnabledDevelopmentSuffix implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Override
 	protected String assignPatternSuffixTM() {

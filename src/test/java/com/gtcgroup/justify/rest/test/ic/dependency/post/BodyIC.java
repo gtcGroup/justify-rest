@@ -26,7 +26,7 @@
 
 package com.gtcgroup.justify.rest.test.ic.dependency.post;
 
-import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -48,7 +48,7 @@ import com.gtcgroup.justify.core.base.JstBaseIC;
 public class BodyIC extends JstBaseIC {
 
 	@SuppressWarnings("static-method")
-	@GET
+	@POST
 	@Produces(MediaType.TEXT_PLAIN)
 	public String get(final String hello) {
 		return hello;

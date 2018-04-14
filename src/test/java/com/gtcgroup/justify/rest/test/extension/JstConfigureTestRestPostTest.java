@@ -35,57 +35,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 
 import org.glassfish.jersey.client.ClientConfig;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.opentest4j.AssertionFailedError;
 
 import com.gtcgroup.justify.core.test.extension.JstConfigureTestLogToConsole;
 import com.gtcgroup.justify.rest.filter.JstLogRequestDefaultFilter;
 import com.gtcgroup.justify.rest.filter.JstLogResponseDefaultFilter;
 import com.gtcgroup.justify.rest.test.assertion.AssertionsREST;
 import com.gtcgroup.justify.rest.test.assertion.JstAssertRestPO;
-import com.gtcgroup.justify.rest.test.extension.dependency.ConcreteConfigureTestRestPO;
+import com.gtcgroup.justify.rest.test.extension.dependency.ConfigurePostTestRestPO;
 import com.gtcgroup.justify.rest.test.ic.dependency.get.ValuesIC;
 import com.sun.research.ws.wadl.HTTPMethods;
 
 @SuppressWarnings("static-method")
 @JstConfigureTestLogToConsole()
-@JstConfigureTestREST(configureTestRestPO = ConcreteConfigureTestRestPO.class)
+@JstConfigureTestREST(configureTestRestPO = ConfigurePostTestRestPO.class)
 public class JstConfigureTestRestPostTest {
-
-	@Test
-	public void testGET_enityException() {
-
-		Assertions.assertThrows(AssertionFailedError.class, () -> {
-			AssertionsREST.assertSingle(String.class,
-					JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString()).withPath("body")
-							.withEntity(Entity.entity("Hello", MediaType.TEXT_PLAIN))
-							.withAcceptedResponseMediaTypes(MediaType.TEXT_PLAIN));
-		});
-
-	}
-
-	@Test
-	public void testGET_requestBaseUriException() {
-
-		Assertions.assertThrows(AssertionFailedError.class, () -> {
-			AssertionsREST.assertSingle(String.class,
-					JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString()).withPath("fake"));
-		});
-	}
-
-	@Test
-	public void testGET_returnTypeException() {
-
-		Assertions.assertThrows(AssertionFailedError.class, () -> {
-			AssertionsREST.assertSingle(Long.class,
-					JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString()).withPath("values"));
-		});
-	}
 
 	@Test
 	public void testHelloIC_mediaTypes() {
@@ -114,6 +83,22 @@ public class JstConfigureTestRestPostTest {
 			assertFalse(AssertionsREST.assertList(JstAssertRestPO.withHttpMethod(HTTPMethods.GET.toString())
 					.withPath("hello").withLogResponseFilter()).isEmpty());
 		});
+	}
+
+	@Test
+	public void testPOST_happyPath() {
+
+		AssertionsREST.assertSingle(String.class,
+				JstAssertRestPO.withHttpMethod(HTTPMethods.POST.toString()).withPath("body")
+						.withEntity(Entity.entity("Hello", MediaType.TEXT_PLAIN))
+						.withAcceptedResponseMediaTypes(MediaType.TEXT_PLAIN));
+	}
+
+	@Test
+	public void testPOST_returnTypeException() {
+
+		AssertionsREST.assertSingle(Long.class, JstAssertRestPO.withHttpMethod(HTTPMethods.POST.toString())
+				.withPath("fake").withValidHttpStatusCodes(HttpServletResponse.SC_NOT_FOUND));
 	}
 
 	@SuppressWarnings("boxing")

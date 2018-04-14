@@ -35,13 +35,13 @@ import com.gtcgroup.justify.core.test.extension.JstConfigureTestLogToConsole;
 import com.gtcgroup.justify.rest.test.assertion.AssertionsREST;
 import com.gtcgroup.justify.rest.test.assertion.JstAssertRestPO;
 import com.gtcgroup.justify.rest.test.extension.JstConfigureTestREST;
-import com.gtcgroup.justify.rest.test.extension.dependency.ConcreteIntentionalTestRestPO;
+import com.gtcgroup.justify.rest.test.extension.dependency.IntentionalGetTestRestPO;
 import com.sun.research.ws.wadl.HTTPMethods;
 
 @SuppressWarnings("static-method")
 @Tag(value = "intentional")
 @JstConfigureTestLogToConsole()
-@JstConfigureTestREST(configureTestRestPO = ConcreteIntentionalTestRestPO.class)
+@JstConfigureTestREST(configureTestRestPO = IntentionalGetTestRestPO.class)
 public class Intentional3AssertionFailedTest {
 
 	@Test

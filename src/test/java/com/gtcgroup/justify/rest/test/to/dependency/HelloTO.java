@@ -24,9 +24,7 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.gtcgroup.justify.rest.test.extension.dependency;
-
-import java.io.Serializable;
+package com.gtcgroup.justify.rest.test.to.dependency;
 
 import com.gtcgroup.justify.rest.test.JstBaseTO;
 
@@ -41,7 +39,7 @@ import com.gtcgroup.justify.rest.test.JstBaseTO;
  * @author Marvin Toll
  * @since 8.5
  */
-public class HelloTO extends JstBaseTO implements Serializable {
+public class HelloTO extends JstBaseTO {
 
 	private static final long serialVersionUID = 1L;
 
