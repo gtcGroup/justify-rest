@@ -23,38 +23,37 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.gtcgroup.justify.rest.filter;
 
-import java.io.IOException;
+package com.gtcgroup.test.rest.testing.extension;
 
-import javax.ws.rs.client.ClientRequestContext;
-import javax.ws.rs.client.ClientRequestFilter;
-import javax.ws.rs.ext.Provider;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-/**
- * This {@link ClientRequestFilter} supports logging.
- *
- * <p style="font-family:Verdana; font-size:10px; font-style:italic">
- * Copyright (c) 2006 - 2018 by Global Technology Consulting Group, Inc. at
- * <a href="http://gtcGroup.com">gtcGroup.com </a>.
- * </p>
- *
- * @author Marvin Toll
- * @since 8.5.0
- */
-@Provider
-public class JstLogRequestDefaultFilter implements ClientRequestFilter {
+import org.junit.jupiter.api.Test;
 
-	private static ClientRequestContext clientRequestContext;
+import com.gtcgroup.justify.core.testing.extension.JstConfigureTestLogToConsole;
+import com.gtcgroup.justify.rest.testing.assertion.AssertionsREST;
+import com.gtcgroup.justify.rest.testing.assertion.JstAssertRestPO;
+import com.gtcgroup.justify.rest.testing.extension.JstConfigureTestingREST;
+import com.gtcgroup.test.rest.testing.extension.dependency.ConfigureDeleteTestRestPO;
+import com.gtcgroup.test.rest.to.dependency.HelloTO;
+import com.sun.research.ws.wadl.HTTPMethods;
 
-	public static ClientRequestContext retrieveClientRequestContext() {
-		return clientRequestContext;
-	}
+@SuppressWarnings("static-method")
+@JstConfigureTestLogToConsole()
+@JstConfigureTestingREST(configureTestRestPO = ConfigureDeleteTestRestPO.class)
+public class JstConfigureTestRestDeleteTest {
 
-	@Override
-	public void filter(final ClientRequestContext requestContext) throws IOException {
+	@Test
+	public void testDelete() {
 
-		JstLogRequestDefaultFilter.clientRequestContext = requestContext;
+		final HelloTO hello = AssertionsREST.assertSingle(HelloTO.class,
+				JstAssertRestPO.withHttpMethod(HTTPMethods.DELETE.toString()).withPath("entity/" + "uuid")
+						.withRequestLogging().withResponseLogging());
 
+		assertNull(hello.getText());
+
+		// hello.getClass();
+		// final HelloTO helloTO = hello.getEntity();
+		// assertEquals(NoteDE.class, note.getEntity().getClass());
 	}
 }

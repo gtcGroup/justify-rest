@@ -23,38 +23,27 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.gtcgroup.justify.rest.filter;
 
-import java.io.IOException;
+package com.gtcgroup.test.rest.testing.intentional.error;
 
-import javax.ws.rs.client.ClientRequestContext;
-import javax.ws.rs.client.ClientRequestFilter;
-import javax.ws.rs.ext.Provider;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * This {@link ClientRequestFilter} supports logging.
- *
- * <p style="font-family:Verdana; font-size:10px; font-style:italic">
- * Copyright (c) 2006 - 2018 by Global Technology Consulting Group, Inc. at
- * <a href="http://gtcGroup.com">gtcGroup.com </a>.
- * </p>
- *
- * @author Marvin Toll
- * @since 8.5.0
- */
-@Provider
-public class JstLogRequestDefaultFilter implements ClientRequestFilter {
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
-	private static ClientRequestContext clientRequestContext;
+import com.gtcgroup.justify.core.testing.extension.JstConfigureTestLogToConsole;
+import com.gtcgroup.justify.rest.testing.extension.JstConfigureTestingREST;
+import com.gtcgroup.test.rest.testing.extension.dependency.ConfigureExceptionTestRestPO;
 
-	public static ClientRequestContext retrieveClientRequestContext() {
-		return clientRequestContext;
-	}
+@SuppressWarnings("static-method")
+@Tag(value = "intentional")
+@JstConfigureTestLogToConsole()
+@JstConfigureTestingREST(configureTestRestPO = ConfigureExceptionTestRestPO.class)
+public class Intentional1AssertionErrorTest {
 
-	@Override
-	public void filter(final ClientRequestContext requestContext) throws IOException {
+	@Test
+	public void configureException() {
 
-		JstLogRequestDefaultFilter.clientRequestContext = requestContext;
-
+		assertTrue(true);
 	}
 }

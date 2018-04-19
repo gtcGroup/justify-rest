@@ -23,16 +23,20 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.gtcgroup.justify.rest.filter;
 
-import java.io.IOException;
+package com.gtcgroup.justify.rest.testing.extension;
 
-import javax.ws.rs.client.ClientRequestContext;
-import javax.ws.rs.client.ClientRequestFilter;
-import javax.ws.rs.ext.Provider;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.Extension;
 
 /**
- * This {@link ClientRequestFilter} supports logging.
+ * This {@link Extension} class initializes system properties for the duration
+ * of the test class and then reinstates the original values.
  *
  * <p style="font-family:Verdana; font-size:10px; font-style:italic">
  * Copyright (c) 2006 - 2018 by Global Technology Consulting Group, Inc. at
@@ -40,21 +44,12 @@ import javax.ws.rs.ext.Provider;
  * </p>
  *
  * @author Marvin Toll
- * @since 8.5.0
+ * @since 8.5
  */
-@Provider
-public class JstLogRequestDefaultFilter implements ClientRequestFilter {
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@ExtendWith(ConfigureTestingRestExtension.class)
+public @interface JstConfigureTestingREST {
 
-	private static ClientRequestContext clientRequestContext;
-
-	public static ClientRequestContext retrieveClientRequestContext() {
-		return clientRequestContext;
-	}
-
-	@Override
-	public void filter(final ClientRequestContext requestContext) throws IOException {
-
-		JstLogRequestDefaultFilter.clientRequestContext = requestContext;
-
-	}
+	Class<? extends JstConfigureTestingRestPO> configureTestRestPO();
 }

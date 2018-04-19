@@ -23,16 +23,14 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.gtcgroup.justify.rest.filter;
+package com.gtcgroup.justify.rest.testing.extension;
 
-import java.io.IOException;
-
-import javax.ws.rs.client.ClientRequestContext;
-import javax.ws.rs.client.ClientRequestFilter;
-import javax.ws.rs.ext.Provider;
+import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.test.grizzly.GrizzlyTestContainerFactory;
 
 /**
- * This {@link ClientRequestFilter} supports logging.
+ * This Parameter Object class supports configuring an
+ * {@link GrizzlyTestContainerFactory}.
  *
  * <p style="font-family:Verdana; font-size:10px; font-style:italic">
  * Copyright (c) 2006 - 2018 by Global Technology Consulting Group, Inc. at
@@ -40,21 +38,16 @@ import javax.ws.rs.ext.Provider;
  * </p>
  *
  * @author Marvin Toll
- * @since 8.5.0
+ * @since 8.5
  */
-@Provider
-public class JstLogRequestDefaultFilter implements ClientRequestFilter {
+public abstract class JstConfigureTestingRestPO {
 
-	private static ClientRequestContext clientRequestContext;
+	private ResourceConfig resourceConfig;
 
-	public static ClientRequestContext retrieveClientRequestContext() {
-		return clientRequestContext;
+	public ResourceConfig getResourceConfig() {
+		this.resourceConfig = instantiateResourceConfigTM();
+		return this.resourceConfig;
 	}
 
-	@Override
-	public void filter(final ClientRequestContext requestContext) throws IOException {
-
-		JstLogRequestDefaultFilter.clientRequestContext = requestContext;
-
-	}
+	protected abstract ResourceConfig instantiateResourceConfigTM();
 }
