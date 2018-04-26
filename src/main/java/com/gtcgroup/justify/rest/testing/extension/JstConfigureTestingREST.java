@@ -51,5 +51,5 @@ import org.junit.jupiter.api.extension.Extension;
 @ExtendWith(ConfigureTestingRestExtension.class)
 public @interface JstConfigureTestingREST {
 
-	Class<? extends JstConfigureTestingRestPO> configureTestRestPO();
+	Class<? extends JstConfigureTestingRestPO> configureTestingRestPO();
 }

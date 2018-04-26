@@ -38,7 +38,7 @@ import com.gtcgroup.test.rest.testing.extension.dependency.ConfigureExceptionTes
 @SuppressWarnings("static-method")
 @Tag(value = "intentional")
 @JstConfigureTestLogToConsole()
-@JstConfigureTestingREST(configureTestRestPO = ConfigureExceptionTestRestPO.class)
+@JstConfigureTestingREST(configureTestingRestPO = ConfigureExceptionTestRestPO.class)
 public class Intentional1AssertionErrorTest {
 
 	@Test

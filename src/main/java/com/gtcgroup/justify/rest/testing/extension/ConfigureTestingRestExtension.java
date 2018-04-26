@@ -42,7 +42,7 @@ public class ConfigureTestingRestExtension extends JstBaseExtension implements B
 				extensionContext.getRequiredTestClass(), JstConfigureTestingREST.class);
 
 		// Retrieve values from annotation.
-		return configureTestREST.configureTestRestPO();
+		return configureTestREST.configureTestingRestPO();
 	}
 
 }

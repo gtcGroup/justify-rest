@@ -12,7 +12,6 @@ public enum LogRestUtilHelper {
 	INSTANCE;
 
 	/**
-	 * @param containerRequestContext
 	 * @return {@link String}
 	 */
 	public static String formatRequestMessage() {

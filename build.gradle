@@ -63,6 +63,17 @@ dependencies {
     compile ('org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-grizzly2:2.+')  {
         exclude group: 'junit', module: 'junit'
     }
+
+    // TODO: REMOVE THIS!!!!!
+    compile("org.junit.jupiter:junit-jupiter-api:5.+") {
+        exclude group: 'junit', module: 'junit'
+    }
+    compile("org.junit.platform:junit-platform-launcher:1.+") {
+        exclude group: 'junit', module: 'junit'
+    }
+    compile("org.junit.jupiter:junit-jupiter-engine:5.+") {
+        exclude group: 'junit', module: 'junit'
+        
 } 
  
 test {
@@ -130,7 +141,7 @@ uploadArchives {
         name 'Justify REST'
         packaging 'jar'
 
-        description 'REST MODULE: PED Central is the home for the open-source “Justify” suite of software engineering modules. Justify seeks API alignment between Java 1.8+ application code and JUnit 5 test code.'
+        description 'REST MODULE: PED Central is the home for the open-source ï¿½Justifyï¿½ suite of software engineering modules. Justify seeks API alignment between Java 1.8+ application code and JUnit 5 test code.'
         url 'http://pedCentral.com/justify'
 
         scm {

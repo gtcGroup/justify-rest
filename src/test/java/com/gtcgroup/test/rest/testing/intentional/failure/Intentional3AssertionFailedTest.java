@@ -41,7 +41,7 @@ import com.sun.research.ws.wadl.HTTPMethods;
 @SuppressWarnings("static-method")
 @Tag(value = "intentional")
 @JstConfigureTestLogToConsole()
-@JstConfigureTestingREST(configureTestRestPO = IntentionalGetTestRestPO.class)
+@JstConfigureTestingREST(configureTestingRestPO = IntentionalGetTestRestPO.class)
 public class Intentional3AssertionFailedTest {
 
 	@Test
