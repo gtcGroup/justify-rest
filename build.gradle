@@ -73,7 +73,7 @@ dependencies {
     }
     compile("org.junit.jupiter:junit-jupiter-engine:5.+") {
         exclude group: 'junit', module: 'junit'
-        
+    }   
 } 
  
 test {
@@ -168,4 +168,4 @@ uploadArchives {
     }
   }
 }
- */
+*/
