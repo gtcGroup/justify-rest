@@ -42,11 +42,9 @@ import org.glassfish.jersey.test.grizzly.GrizzlyTestContainerFactory;
  */
 public abstract class JstConfigureTestingRestPO {
 
-	private ResourceConfig resourceConfig;
-
 	public ResourceConfig getResourceConfig() {
-		this.resourceConfig = instantiateResourceConfigTM();
-		return this.resourceConfig;
+
+		return instantiateResourceConfigTM();
 	}
 
 	protected abstract ResourceConfig instantiateResourceConfigTM();

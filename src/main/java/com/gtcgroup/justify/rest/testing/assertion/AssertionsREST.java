@@ -42,7 +42,6 @@ import org.glassfish.jersey.client.ClientConfig;
 import org.opentest4j.AssertionFailedError;
 
 import com.gtcgroup.justify.rest.helper.internal.LogRestUtilHelper;
-import com.sun.research.ws.wadl.HTTPMethods;
 
 /**
  * This Assertions class provides convenience methods for assertion processing.
@@ -65,18 +64,19 @@ public enum AssertionsREST {
 	 * thrown indicating a valid status code was returned as defined in the
 	 * {@link JstAssertRestPO}.
 	 *
-	 * @return {@link List} or null if the I/O Controller returns no response.
+	 * @return {@link List} or empty list if the I/O Controller returns no response.
 	 */
-	public static List<?> assertList(final JstAssertRestPO assertRestPO) {
+	@SuppressWarnings("unchecked")
+	public static List<Object> assertList(final JstAssertRestPO assertRestPO) {
 
 		try {
 
-			return buildResponseList(assertRestPO);
+			return (List<Object>) buildResponseList(assertRestPO);
 
 		} catch (final Exception e) {
-			throwAssertFailedWithMessage(HTTPMethods.GET.toString(), assertRestPO, null, e.getMessage()); // Tested
+			throwAssertFailedWithMessage("GET", assertRestPO, null, e.getMessage()); // Tested
 		}
-		return null;
+		return new ArrayList<>();
 
 	}
 
@@ -109,8 +109,8 @@ public enum AssertionsREST {
 				}
 			}
 
-			if (false == validStatusCode) {
-				throwAssertFailedWithMessage(assertRestPO.getHttpMethod().toString(), assertRestPO, entityType,
+			if (!validStatusCode) {
+				throwAssertFailedWithMessage(assertRestPO.getHttpMethod(), assertRestPO, entityType,
 						"The response status code [" + responseSingle.getStatus() + "] is not valid.");
 			}
 
@@ -121,8 +121,7 @@ public enum AssertionsREST {
 
 		} catch (final Exception e) {
 
-			throwAssertFailedWithMessage(assertRestPO.getHttpMethod().toString(), assertRestPO, entityType,
-					e.getMessage());
+			throwAssertFailedWithMessage(assertRestPO.getHttpMethod(), assertRestPO, entityType, e.getMessage());
 
 		} finally {
 
@@ -151,10 +150,7 @@ public enum AssertionsREST {
 
 		final Invocation.Builder invocationBuilder = instantiateInvocationBuilder(assertRestPO);
 
-		// TODO: Consider for future test implementation.
-		// invocationBuilder.header(name, value);
-
-		List<?> responseList = new ArrayList<>();
+		List<?> responseList;
 
 		if (assertRestPO.containsResponseEnity()) {
 			responseList = (List<?>) invocationBuilder.method(assertRestPO.getHttpMethod(),
@@ -170,9 +166,6 @@ public enum AssertionsREST {
 	private static Response buildResponseSingle(final JstAssertRestPO assertRestPO) {
 
 		final Invocation.Builder invocationBuilder = instantiateInvocationBuilder(assertRestPO);
-
-		// TODO: Consider for future test implementation.
-		// invocationBuilder.header(name, value);
 
 		Response responseSingle;
 
@@ -194,9 +187,6 @@ public enum AssertionsREST {
 		}
 
 		final Client client = ClientBuilder.newClient(clientConfig);
-
-		// TODO: Consider for future implementation.
-		// client.register(componentClass);
 
 		WebTarget webTarget = client.target(assertRestPO.getTargetURI());
 

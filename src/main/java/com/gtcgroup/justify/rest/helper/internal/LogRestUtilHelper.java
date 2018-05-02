@@ -4,7 +4,7 @@ import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.core.Response;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gtcgroup.justify.core.testing.extension.JstBaseExtension;
+import com.gtcgroup.justify.core.testing.extension.JstBaseTestingExtension;
 import com.gtcgroup.justify.rest.filter.JstLogRequestDefaultFilter;
 
 public enum LogRestUtilHelper {
@@ -39,7 +39,7 @@ public enum LogRestUtilHelper {
 
 		message.append("HTTP RESPONSE");
 		message.append("\n\tHeader: ").append(responseSingle.getHeaders());
-		message.append("\n\tUser:   ").append(JstBaseExtension.getUserId());
+		message.append("\n\tUser:   ").append(JstBaseTestingExtension.getUserId());
 		message.append("\n\tStatus: ").append(responseSingle.getStatus());
 
 		message.append("\n\tEntity: ");

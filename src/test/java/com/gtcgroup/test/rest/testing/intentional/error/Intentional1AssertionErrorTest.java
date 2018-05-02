@@ -31,13 +31,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import com.gtcgroup.justify.core.testing.extension.JstConfigureTestLogToConsole;
+import com.gtcgroup.justify.core.testing.extension.JstConfigureTestingLogToConsole;
 import com.gtcgroup.justify.rest.testing.extension.JstConfigureTestingREST;
 import com.gtcgroup.test.rest.testing.extension.dependency.ConfigureExceptionTestRestPO;
 
 @SuppressWarnings("static-method")
 @Tag(value = "intentional")
-@JstConfigureTestLogToConsole()
+@JstConfigureTestingLogToConsole()
 @JstConfigureTestingREST(configureTestingRestPO = ConfigureExceptionTestRestPO.class)
 public class Intentional1AssertionErrorTest {
 

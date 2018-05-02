@@ -52,9 +52,10 @@ public class JstLogRequestDefaultFilter implements ClientRequestFilter {
 	}
 
 	@Override
-	public void filter(final ClientRequestContext requestContext) throws IOException {
+	public void filter(final ClientRequestContext clientRequestContext) throws IOException {
 
-		JstLogRequestDefaultFilter.clientRequestContext = requestContext;
+		// Preserve this for later retrieval.
+		JstLogRequestDefaultFilter.clientRequestContext = clientRequestContext;
 
 	}
 }

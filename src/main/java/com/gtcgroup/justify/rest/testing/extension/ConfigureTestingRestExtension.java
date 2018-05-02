@@ -5,10 +5,11 @@ import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-import com.gtcgroup.justify.core.testing.extension.JstBaseExtension;
+import com.gtcgroup.justify.core.testing.extension.JstBaseTestingExtension;
 import com.gtcgroup.justify.rest.testing.helper.JstRestUtilHelper;
 
-public class ConfigureTestingRestExtension extends JstBaseExtension implements BeforeAllCallback, AfterAllCallback {
+public class ConfigureTestingRestExtension extends JstBaseTestingExtension
+		implements BeforeAllCallback, AfterAllCallback {
 
 	private TestContainer testContainer;
 

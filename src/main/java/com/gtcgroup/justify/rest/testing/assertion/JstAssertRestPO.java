@@ -218,18 +218,12 @@ public class JstAssertRestPO extends JstBasePO {
 
 	protected boolean containsQueryParam() {
 
-		if (this.queryParamMap.isEmpty()) {
-			return false;
-		}
-		return true;
+		return !this.queryParamMap.isEmpty();
 	}
 
 	protected boolean containsResponseEnity() {
 
-		if (null == this.responseEntity) {
-			return false;
-		}
-		return true;
+		return null != this.responseEntity;
 	}
 
 	protected ClientConfig getClientConfig() {
@@ -256,8 +250,9 @@ public class JstAssertRestPO extends JstBasePO {
 		return this.queryParamMap;
 	}
 
-	protected Entity<?> getResponseEntity() {
-		return this.responseEntity;
+	@SuppressWarnings("unchecked")
+	protected Entity<Object> getResponseEntity() {
+		return (Entity<Object>) this.responseEntity;
 	}
 
 	protected String[] getSpecifiedResponseMediaTypes() {

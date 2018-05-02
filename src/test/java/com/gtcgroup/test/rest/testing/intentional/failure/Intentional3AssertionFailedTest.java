@@ -31,7 +31,7 @@ import javax.ws.rs.client.Entity;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import com.gtcgroup.justify.core.testing.extension.JstConfigureTestLogToConsole;
+import com.gtcgroup.justify.core.testing.extension.JstConfigureTestingLogToConsole;
 import com.gtcgroup.justify.rest.testing.assertion.AssertionsREST;
 import com.gtcgroup.justify.rest.testing.assertion.JstAssertRestPO;
 import com.gtcgroup.justify.rest.testing.extension.JstConfigureTestingREST;
@@ -40,7 +40,7 @@ import com.sun.research.ws.wadl.HTTPMethods;
 
 @SuppressWarnings("static-method")
 @Tag(value = "intentional")
-@JstConfigureTestLogToConsole()
+@JstConfigureTestingLogToConsole()
 @JstConfigureTestingREST(configureTestingRestPO = IntentionalGetTestRestPO.class)
 public class Intentional3AssertionFailedTest {
 

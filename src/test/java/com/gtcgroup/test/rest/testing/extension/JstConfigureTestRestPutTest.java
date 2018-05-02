@@ -34,7 +34,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.junit.jupiter.api.Test;
 
-import com.gtcgroup.justify.core.testing.extension.JstConfigureTestLogToConsole;
+import com.gtcgroup.justify.core.testing.extension.JstConfigureTestingLogToConsole;
 import com.gtcgroup.justify.rest.testing.assertion.AssertionsREST;
 import com.gtcgroup.justify.rest.testing.assertion.JstAssertRestPO;
 import com.gtcgroup.justify.rest.testing.extension.JstConfigureTestingREST;
@@ -43,7 +43,7 @@ import com.gtcgroup.test.rest.to.dependency.HelloTO;
 import com.sun.research.ws.wadl.HTTPMethods;
 
 @SuppressWarnings("static-method")
-@JstConfigureTestLogToConsole()
+@JstConfigureTestingLogToConsole()
 @JstConfigureTestingREST(configureTestingRestPO = ConfigurePutTestRestPO.class)
 public class JstConfigureTestRestPutTest {
 
